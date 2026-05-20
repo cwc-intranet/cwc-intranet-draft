@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CWC Knowledge Engine</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    html, body {
+      background:#0A1520;
+      color:#ffffff;
+      font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+      width:100%;
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    :root {
+      --green:#3EAB72;
+      --navy:#0A1520;
+      --card:#0F2030;
+      --border:#1A3045;
+      --grey:#B0BBCC;
+    }
+
+    a { color:var(--green); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+
+    .page-wrap { padding:0 32px; background:#0A1520; }
+
+    /* ── HERO ── */
+    .hero {
+      background:#0A1520;
+      padding:48px 32px 36px;
+    }
+    .hero-inner {
+      display:flex;
+      gap:40px;
+      align-items:flex-start;
+      min-width:900px;
+    }
+    .hero-left {
+      flex:1.2;
+    }
+    .hero-right {
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+    .hero-tag {
+      display:inline-block;
+      background:rgba(62,171,114,0.15);
+      color:var(--green);
+      border:1px solid rgba(62,171,114,0.35);
+      border-radius:20px;
+      font-size:11px;
+      font-weight:600;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      padding:4px 14px;
+      margin-bottom:18px;
+    }
+    .hero h1 {
+      font-size:36px;
+      font-weight:700;
+      line-height:1.15;
+      color:#ffffff;
+      margin-bottom:10px;
+    }
+    .hero-sub {
+      font-size:15px;
+      color:var(--grey);
+      margin-bottom:28px;
+      line-height:1.5;
+    }
+
+    /* Search bar */
+    .search-wrap {
+      display:flex;
+      align-items:center;
+      background:#0F2030;
+      border:1px solid #1A3045;
+      border-radius:8px;
+      overflow:hidden;
+      max-width:520px;
+      margin-bottom:20px;
+    }
+    .search-icon {
+      padding:0 14px;
+      color:var(--grey);
+      font-size:16px;
+      flex-shrink:0;
+    }
+    .search-wrap input {
+      flex:1;
+      background:transparent;
+      border:none;
+      outline:none;
+      color:#fff;
+      font-size:14px;
+      padding:13px 0;
+    }
+    .search-wrap input::placeholder { color:#4A6070; }
+    .search-btn {
+      background:var(--green);
+      border:none;
+      color:#fff;
+      font-size:13px;
+      font-weight:600;
+      padding:13px 22px;
+      cursor:pointer;
+      transition:background 0.2s;
+    }
+    .search-btn:hover { background:#35965f; }
+
+    /* Popular searches */
+    .popular {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+      font-size:12px;
+    }
+    .popular-label {
+      color:var(--grey);
+      flex-shrink:0;
+    }
+    .popular a {
+      background:#0F2030;
+      border:1px solid #1A3045;
+      border-radius:20px;
+      padding:4px 12px;
+      font-size:12px;
+      color:var(--grey);
+      transition:border-color 0.2s, color 0.2s;
+    }
+    .popular a:hover {
+      border-color:var(--green);
+      color:var(--green);
+      text-decoration:none;
+    }
+
+    /* Right panel card */
+    .hero-card {
+      background:#0F2030;
+      border:1px solid #1A3045;
+      border-radius:12px;
+      padding:24px;
+    }
+    .hero-card-icon {
+      font-size:28px;
+      margin-bottom:12px;
+    }
+    .hero-card h3 {
+      font-size:16px;
+      font-weight:700;
+      color:#fff;
+      margin-bottom:8px;
+    }
+    .hero-card p {
+      font-size:13px;
+      color:var(--grey);
+      line-height:1.6;
+      margin-bottom:16px;
+    }
+    .hero-card-links {
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .hero-card-links a {
+      font-size:13px;
+      color:var(--green);
+    }
+
+    /* Right image placeholder */
+    .hero-img-placeholder {
+      background:#0F2030;
+      border:1px solid #1A3045;
+      border-radius:12px;
+      height:120px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#4A6070;
+      font-size:12px;
+    }
+  
+    /* ── CATEGORIES ── */
+    .categories {
+      background:#0A1520;
+      padding:0 32px 40px;
+    }
+    .cat-grid {
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:16px;
+    }
+    .cat-tile {
+      background:#0F2030;
+      border:1px solid #1A3045;
+      border-radius:12px;
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      text-decoration:none;
+      transition:border-color 0.2s, background 0.2s;
+    }
+    .cat-tile:hover {
+      border-color:#3EAB72;
+      background:#122535;
+      text-decoration:none;
+    }
+    .cat-icon {
+      font-size:22px;
+      margin-bottom:4px;
+    }
+    .cat-tile strong {
+      font-size:14px;
+      font-weight:700;
+      color:#ffffff;
+    }
+    .cat-desc {
+      font-size:12px;
+      color:#B0BBCC;
+      line-height:1.4;
+    }
+    .cat-arrow {
+      font-size:14px;
+      color:#3EAB72;
+      margin-top:6px;
+    }
+</style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero-inner">
+
+      <!-- LEFT: headline + search -->
+      <div class="hero-left">
+        <span class="hero-tag">Knowledge Engine</span>
+        <h1>Find knowledge. Build capability. Deliver value.</h1>
+        <p class="hero-sub">Search across projects, standards, guidance notes and expertise.</p>
+
+        <div class="search-wrap">
+          <span class="search-icon">&#128269;</span>
+          <input type="text" placeholder="Search knowledge, projects, standards&hellip;" />
+          <button class="search-btn">Search</button>
+        </div>
+
+        <div class="popular">
+          <span class="popular-label">Popular searches:</span>
+          <a href="#">NABERS</a>
+          <a href="#">EPC</a>
+          <a href="#">Decarbonisation</a>
+          <a href="#">Risk Management</a>
+          <a href="#">Gateway Reviews</a>
+        </div>
+      </div>
+
+      <!-- RIGHT: card + image -->
+      <div class="hero-right">
+        <div class="hero-card">
+          <div class="hero-card-icon">&#128218;</div>
+          <h3>Your knowledge hub</h3>
+          <p>Centralised insights, best practice and technical expertise &mdash; curated for our people and clients.</p>
+          <div class="hero-card-links">
+            <a href="#">About Knowledge Engine &rarr;</a>
+            <a href="#">How to contribute &rarr;</a>
+          </div>
+        </div>
+
+        <div class="hero-img-placeholder">
+          [ Building image &mdash; replace via Site Assets ]
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="categories">
+    <div class="cat-grid">
+
+      <a class="cat-tile" href="#">
+        <span class="cat-icon">📄</span>
+        <strong>Technical Guidance</strong>
+        <span class="cat-desc">Standards, frameworks and how-to guides</span>
+        <span class="cat-arrow">&rarr;</span>
+      </a>
+
+      <a class="cat-tile" href="#">
+        <span class="cat-icon">📋</span>
+        <strong>Policies &amp; Procedures</strong>
+        <span class="cat-desc">Governance, compliance and risk policies</span>
+        <span class="cat-arrow">&rarr;</span>
+      </a>
+
+      <a class="cat-tile" href="#">
+        <span class="cat-icon">🛠</span>
+        <strong>Templates &amp; Tools</strong>
+        <span class="cat-desc">Documents, calculators and checklists</span>
+        <span class="cat-arrow">&rarr;</span>
+      </a>
+
+      <a class="cat-tile" href="#">
+        <span class="cat-icon">💼</span>
+        <strong>Case Studies</strong>
+        <span class="cat-desc">Project insights and lessons learned</span>
+        <span class="cat-arrow">&rarr;</span>
+      </a>
+
+      <a class="cat-tile" href="#">
+        <span class="cat-icon">🎓</span>
+        <strong>Lessons Learned</strong>
+        <span class="cat-desc">Knowledge from experience</span>
+        <span class="cat-arrow">&rarr;</span>
+      </a>
+
+      <a class="cat-tile" href="#">
+        <span class="cat-icon">👥</span>
+        <strong>Communities</strong>
+        <span class="cat-desc">Connect and collaborate across teams</span>
+        <span class="cat-arrow">&rarr;</span>
+      </a>
+
+    </div>
+  </section>
+
+
+  <!-- PANELS ROW -->
+  <section class="panels-row" style="padding:0 32px 40px;background:#0A1520;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1200px;">
+
+      <!-- Technical Guidance Library -->
+      <div style="background:#0F2030;border:1px solid #1A3045;border-radius:12px;padding:24px;">
+        <h3 style="font-size:16px;font-weight:700;color:#fff;margin-bottom:16px;">⚙️ Technical Guidance Library</h3>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+
+          <a href="#" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;color:#fff;text-decoration:none;">
+            <span style="width:8px;height:8px;background:#3EAB72;border-radius:50%;flex-shrink:0;"></span>
+            <div><strong style="font-size:13px;display:block;">Sustainability &amp; Net Zero</strong><span style="font-size:12px;color:#B0BBCC;">Guidance on decarbonisation, net zero strategies and climate resilience.</span></div>
+          </a>
+
+          <a href="#" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;color:#fff;text-decoration:none;">
+            <span style="width:8px;height:8px;background:#3EAB72;border-radius:50%;flex-shrink:0;"></span>
+            <div><strong style="font-size:13px;display:block;">Building Performance</strong><span style="font-size:12px;color:#B0BBCC;">NABERS, EPC, energy efficiency and performance improvement.</span></div>
+          </a>
+
+          <a href="#" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;color:#fff;text-decoration:none;">
+            <span style="width:8px;height:8px;background:#3EAB72;border-radius:50%;flex-shrink:0;"></span>
+            <div><strong style="font-size:13px;display:block;">Environmental Assessment</strong><span style="font-size:12px;color:#B0BBCC;">EIA, biodiversity, planning and environmental compliance.</span></div>
+          </a>
+
+          <a href="#" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;color:#fff;text-decoration:none;">
+            <span style="width:8px;height:8px;background:#3EAB72;border-radius:50%;flex-shrink:0;"></span>
+            <div><strong style="font-size:13px;display:block;">Design &amp; Engineering</strong><span style="font-size:12px;color:#B0BBCC;">Technical design guidance and engineering best practice.</span></div>
+          </a>
+
+        </div>
+        <a href="#" style="display:block;margin-top:16px;font-size:13px;color:#3EAB72;">View all guidance &rarr;</a>
+      </div>
+
+      <!-- Recently Updated -->
+      <div style="background:#0F2030;border:1px solid #1A3045;border-radius:12px;padding:24px;">
+        <h3 style="font-size:16px;font-weight:700;color:#fff;margin-bottom:16px;">📄 Recently Updated</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1A3045;">
+            <span style="font-size:13px;color:#fff;">NABERS UK v1.2 Technical Update</span>
+            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+              <span style="font-size:11px;background:rgba(62,171,114,0.15);color:#3EAB72;border:1px solid rgba(62,171,114,0.35);border-radius:4px;padding:2px 6px;">UPDATED</span>
+              <span style="font-size:11px;color:#B0BBCC;">19 May</span>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1A3045;">
+            <span style="font-size:13px;color:#fff;">EPC Methodology Guide</span>
+            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+              <span style="font-size:11px;background:rgba(62,171,114,0.15);color:#3EAB72;border:1px solid rgba(62,171,114,0.35);border-radius:4px;padding:2px 6px;">UPDATED</span>
+              <span style="font-size:11px;color:#B0BBCC;">16 May</span>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1A3045;">
+            <span style="font-size:13px;color:#fff;">Decarbonisation Pathways Playbook</span>
+            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+              <span style="font-size:11px;background:rgba(62,171,114,0.15);color:#3EAB72;border:1px solid rgba(62,171,114,0.35);border-radius:4px;padding:2px 6px;">UPDATED</span>
+              <span style="font-size:11px;color:#B0BBCC;">14 May</span>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1A3045;">
+            <span style="font-size:13px;color:#fff;">Climate Risk Assessment Template</span>
+            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+              <span style="font-size:11px;background:rgba(62,171,114,0.15);color:#3EAB72;border:1px solid rgba(62,171,114,0.35);border-radius:4px;padding:2px 6px;">NEW</span>
+              <span style="font-size:11px;color:#B0BBCC;">12 May</span>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;">
+            <span style="font-size:13px;color:#fff;">Sustainability &amp; Net Zero Standard</span>
+            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+              <span style="font-size:11px;background:rgba(62,171,114,0.15);color:#3EAB72;border:1px solid rgba(62,171,114,0.35);border-radius:4px;padding:2px 6px;">UPDATED</span>
+              <span style="font-size:11px;color:#B0BBCC;">9 May</span>
+            </div>
+          </div>
+
+        </div>
+        <a href="#" style="display:block;margin-top:16px;font-size:13px;color:#3EAB72;">View all recently updated &rarr;</a>
+      </div>
+
+      <!-- Onboarding Journey -->
+      <div style="background:#0F2030;border:1px solid #1A3045;border-radius:12px;padding:24px;">
+        <h3 style="font-size:16px;font-weight:700;color:#fff;margin-bottom:6px;">🧭 Onboarding Journey</h3>
+        <p style="font-size:13px;color:#B0BBCC;margin-bottom:16px;">New to Crookes Walker Consulting? Start here.</p>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;">
+            <span style="width:22px;height:22px;background:#3EAB72;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">&#10003;</span>
+            <span style="font-size:13px;color:#fff;">Welcome to CWC</span>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;">
+            <span style="width:22px;height:22px;background:#3EAB72;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">&#10003;</span>
+            <span style="font-size:13px;color:#fff;">Our Way of Working</span>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;opacity:0.6;">
+            <span style="width:22px;height:22px;background:#1A3045;border:2px solid #3EAB72;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;"></span>
+            <span style="font-size:13px;color:#fff;">Systems &amp; Tools</span>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;opacity:0.6;">
+            <span style="width:22px;height:22px;background:#1A3045;border:2px solid #1A3045;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;"></span>
+            <span style="font-size:13px;color:#fff;">Policies &amp; Essentials</span>
+          </div>
+
+        </div>
+        <a href="#" style="display:block;margin-top:16px;font-size:13px;color:#3EAB72;">Continue journey &rarr;</a>
+      </div>
+
+      <!-- Expert Finder -->
+      <div style="background:#0F2030;border:1px solid #1A3045;border-radius:12px;padding:24px;">
+        <h3 style="font-size:16px;font-weight:700;color:#fff;margin-bottom:16px;">🔍 Expert Finder</h3>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="width:36px;height:36px;background:#1A3045;border:2px solid #3EAB72;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#3EAB72;flex-shrink:0;">ER</span>
+              <div><strong style="font-size:13px;display:block;color:#fff;">Emma Richards</strong><span style="font-size:12px;color:#B0BBCC;">Sustainability &amp; Net Zero</span></div>
+            </div>
+            <a href="#" style="font-size:12px;color:#3EAB72;">View profile</a>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="width:36px;height:36px;background:#1A3045;border:2px solid #3EAB72;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#3EAB72;flex-shrink:0;">DM</span>
+              <div><strong style="font-size:13px;display:block;color:#fff;">Daniel Morgan</strong><span style="font-size:12px;color:#B0BBCC;">Building Performance</span></div>
+            </div>
+            <a href="#" style="font-size:12px;color:#3EAB72;">View profile</a>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="width:36px;height:36px;background:#1A3045;border:2px solid #3EAB72;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#3EAB72;flex-shrink:0;">PS</span>
+              <div><strong style="font-size:13px;display:block;color:#fff;">Priya Shah</strong><span style="font-size:12px;color:#B0BBCC;">Environmental Assessment</span></div>
+            </div>
+            <a href="#" style="font-size:12px;color:#3EAB72;">View profile</a>
+          </div>
+
+        </div>
+        <a href="#" style="display:block;margin-top:16px;font-size:13px;color:#3EAB72;">View all experts &rarr;</a>
+      </div>
+
+    </div>
+  </section>
+
+
+
+  <!-- SECOND PANELS ROW -->
+  <section class="panels-row-2" style="padding:0 32px 40px;background:#0A1520;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:24px;max-width:1200px;">
+
+      <!-- Policies & Compliance -->
+      <div style="background:#0F2030;border:1px solid #1A3045;border-radius:12px;padding:24px;">
+        <h3 style="font-size:16px;font-weight:700;color:#fff;margin-bottom:16px;">🛡 Policies &amp; Compliance</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+
+          <a href="#" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;color:#fff;text-decoration:none;">
+            <span style="font-size:16px;">📄</span>
+            <span style="font-size:13px;">Risk Management Policy</span>
+          </a>
+
+          <a href="#" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;color:#fff;text-decoration:none;">
+            <span style="font-size:16px;">📄</span>
+            <span style="font-size:13px;">Health, Safety &amp; Wellbeing Policy</span>
+          </a>
+
+          <a href="#" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;color:#fff;text-decoration:none;">
+            <span style="font-size:16px;">📄</span>
+            <span style="font-size:13px;">Environmental Policy</span>
+          </a>
+
+          <a href="#" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;color:#fff;text-decoration:none;">
+            <span style="font-size:16px;">📄</span>
+            <span style="font-size:13px;">Information Security Policy</span>
+          </a>
+
+        </div>
+        <a href="#" style="display:block;margin-top:16px;font-size:13px;color:#3EAB72;">View all policies &rarr;</a>
+      </div>
+
+      <!-- Templates & Tools -->
+      <div style="background:#0F2030;border:1px solid #1A3045;border-radius:12px;padding:24px;">
+        <h3 style="font-size:16px;font-weight:700;color:#fff;margin-bottom:16px;">🔧 Templates &amp; Tools</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+
+          <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;color:#fff;text-decoration:none;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-size:16px;">📄</span>
+              <span style="font-size:13px;">Project Brief Template</span>
+            </div>
+            <span style="font-size:10px;font-weight:700;letter-spacing:0.05em;background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.3);border-radius:4px;padding:2px 6px;">WORD</span>
+          </a>
+
+          <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;color:#fff;text-decoration:none;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-size:16px;">📄</span>
+              <span style="font-size:13px;">Risk Register</span>
+            </div>
+            <span style="font-size:10px;font-weight:700;letter-spacing:0.05em;background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.3);border-radius:4px;padding:2px 6px;">EXCEL</span>
+          </a>
+
+          <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;color:#fff;text-decoration:none;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-size:16px;">📄</span>
+              <span style="font-size:13px;">Stakeholder Map</span>
+            </div>
+            <span style="font-size:10px;font-weight:700;letter-spacing:0.05em;background:rgba(251,146,60,0.15);color:#fb923c;border:1px solid rgba(251,146,60,0.3);border-radius:4px;padding:2px 6px;">PPT</span>
+          </a>
+
+          <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#0A1520;border:1px solid #1A3045;border-radius:8px;color:#fff;text-decoration:none;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="font-size:16px;">📄</span>
+              <span style="font-size:13px;">Site Visit Checklist</span>
+            </div>
+            <span style="font-size:10px;font-weight:700;letter-spacing:0.05em;background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.3);border-radius:4px;padding:2px 6px;">EXCEL</span>
+          </a>
+
+        </div>
+        <a href="#" style="display:block;margin-top:16px;font-size:13px;color:#3EAB72;">View all templates &rarr;</a>
+      </div>
+
+      <!-- Curated Insights -->
+      <div style="background:#0F2030;border:1px solid #1A3045;border-radius:12px;padding:24px;">
+        <h3 style="font-size:16px;font-weight:700;color:#fff;margin-bottom:16px;">💡 Curated Insights</h3>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+
+          <div style="background:#0A1520;border:1px solid #1A3045;border-radius:8px;padding:14px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <span style="font-size:10px;font-weight:700;letter-spacing:0.08em;background:rgba(62,171,114,0.15);color:#3EAB72;border:1px solid rgba(62,171,114,0.35);border-radius:4px;padding:2px 8px;">INSIGHT</span>
+            </div>
+            <p style="font-size:13px;font-weight:600;color:#fff;margin-bottom:4px;line-height:1.4;">NABERS UK: What's new in v1.2 and what it means</p>
+            <p style="font-size:12px;color:#B0BBCC;margin-bottom:10px;line-height:1.4;">Key updates, compliance impacts and actions for project teams.</p>
+            <a href="#" style="font-size:12px;color:#3EAB72;">Read article &rarr;</a>
+          </div>
+
+          <div style="background:#0A1520;border:1px solid #1A3045;border-radius:8px;padding:14px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <span style="font-size:10px;font-weight:700;letter-spacing:0.08em;background:rgba(62,171,114,0.15);color:#3EAB72;border:1px solid rgba(62,171,114,0.35);border-radius:4px;padding:2px 8px;">GUIDE</span>
+            </div>
+            <p style="font-size:13px;font-weight:600;color:#fff;margin-bottom:4px;line-height:1.4;">EPC Reform: Preparing for the Future</p>
+            <p style="font-size:12px;color:#B0BBCC;margin-bottom:10px;line-height:1.4;">Understanding upcoming changes and how to stay ahead.</p>
+            <a href="#" style="font-size:12px;color:#3EAB72;">Read guide &rarr;</a>
+          </div>
+
+          <div style="background:#0A1520;border:1px solid #1A3045;border-radius:8px;padding:14px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <span style="font-size:10px;font-weight:700;letter-spacing:0.08em;background:rgba(62,171,114,0.15);color:#3EAB72;border:1px solid rgba(62,171,114,0.35);border-radius:4px;padding:2px 8px;">INSIGHT</span>
+            </div>
+            <p style="font-size:13px;font-weight:600;color:#fff;margin-bottom:4px;line-height:1.4;">Decarbonisation Pathways that Deliver</p>
+            <p style="font-size:12px;color:#B0BBCC;margin-bottom:10px;line-height:1.4;">Practical strategies for measurable emissions reduction.</p>
+            <a href="#" style="font-size:12px;color:#3EAB72;">Read article &rarr;</a>
+          </div>
+
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;">
+          <a href="#" style="font-size:13px;color:#3EAB72;">View all insights &rarr;</a>
+          <div style="display:flex;gap:8px;">
+            <button style="width:28px;height:28px;background:#1A3045;border:1px solid #1A3045;border-radius:50%;color:#B0BBCC;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#9664;</button>
+            <button style="width:28px;height:28px;background:#1A3045;border:1px solid #1A3045;border-radius:50%;color:#B0BBCC;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#9654;</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer style="background:#060E18;border-top:1px solid #1A3045;padding:32px;margin-top:8px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;max-width:1200px;flex-wrap:wrap;gap:16px;">
+
+      <div>
+        <div style="font-size:18px;font-weight:700;color:#fff;letter-spacing:-0.01em;margin-bottom:6px;">
+          Crookes Walker Consulting
+        </div>
+        <p style="font-size:13px;color:#B0BBCC;margin:0;">Building a sustainable and resilient future.</p>
+      </div>
+
+      <nav style="display:flex;gap:24px;flex-wrap:wrap;">
+        <a href="#" style="font-size:13px;color:#B0BBCC;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#3EAB72'" onmouseout="this.style.color='#B0BBCC'">About CWC</a>
+        <a href="#" style="font-size:13px;color:#B0BBCC;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#3EAB72'" onmouseout="this.style.color='#B0BBCC'">Our Services</a>
+        <a href="#" style="font-size:13px;color:#B0BBCC;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#3EAB72'" onmouseout="this.style.color='#B0BBCC'">Contact</a>
+        <a href="#" style="font-size:13px;color:#B0BBCC;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#3EAB72'" onmouseout="this.style.color='#B0BBCC'">Support</a>
+      </nav>
+
+    </div>
+  </footer>
+
+  <script>
+    function notifyHeight() {
+      var h = document.body.scrollHeight;
+      window.parent.postMessage({ frameHeight: h }, '*');
+    }
+    window.addEventListener('load', notifyHeight);
+    window.addEventListener('resize', notifyHeight);
+    setInterval(notifyHeight, 500);
+  </script>
+
+</body>
+</html>
