@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CWC Technical Guru</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{font-family:'Segoe UI',system-ui,sans-serif;width:100%;overflow-x:hidden;background:#f4f4f4;}
+a{text-decoration:none;}
+:root{
+  --g:#3EAB72;--g2:#2d8f5e;--g3:#e8f5ee;
+  --navy:#0D1B2A;--navy2:#0a1520;
+  --soft:#f0f7f4;--neutral:#f2f3f5;--white:#fff;
+  --border:#e5e7eb;
+}
+
+/* NAV */
+.nav{background:linear-gradient(90deg,var(--navy2),var(--navy));padding:0 32px;display:flex;align-items:center;height:52px;position:sticky;top:0;z-index:200;box-shadow:0 2px 20px rgba(0,0,0,.35);}
+.nav-logo{font-size:15px;font-weight:700;color:#fff;margin-right:28px;white-space:nowrap;letter-spacing:-.02em;}
+.nav-logo em{color:var(--g);font-style:normal;}
+.nav-links{display:flex;flex:1;}
+.nl{font-size:12px;color:rgba(255,255,255,.55);padding:0 11px;height:52px;display:flex;align-items:center;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s;}
+.nl.on{color:#fff;border-bottom-color:var(--g);}
+.nl:hover{color:#fff;}
+.nav-r{display:flex;align-items:center;gap:10px;}
+.nav-ic{font-size:18px;color:rgba(255,255,255,.45);cursor:pointer;}
+.nav-av{width:32px;height:32px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;border:2px solid rgba(255,255,255,.2);}
+
+/* HERO */
+.hero{background:var(--navy2);padding:44px 32px 40px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:
+  radial-gradient(ellipse 80% 60% at 70% 50%,rgba(62,171,114,.12) 0%,transparent 60%),
+  radial-gradient(ellipse 40% 40% at 10% 90%,rgba(30,80,120,.15) 0%,transparent 50%);
+pointer-events:none;}
+.hero::after{content:'';position:absolute;top:0;right:0;width:60%;height:100%;
+  background-image:radial-gradient(circle,rgba(62,171,114,.2) 1px,transparent 1px);
+  background-size:24px 24px;
+  -webkit-mask-image:linear-gradient(to left,rgba(0,0,0,.65) 0%,rgba(0,0,0,.15) 55%,transparent 100%);
+  mask-image:linear-gradient(to left,rgba(0,0,0,.65) 0%,rgba(0,0,0,.15) 55%,transparent 100%);
+  pointer-events:none;}
+.hero-inner{display:flex;gap:32px;align-items:center;position:relative;z-index:1;}
+.hero-left{flex:1.5;min-width:0;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(62,171,114,.12);color:var(--g);border:1px solid rgba(62,171,114,.3);border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:5px 14px;margin-bottom:18px;}
+.hero-left h1{font-size:44px;font-weight:700;color:#fff;line-height:1.05;margin-bottom:12px;letter-spacing:-.02em;}
+.hero-left h1 em{color:var(--g);font-style:normal;}
+.hero-sub{font-size:14px;color:rgba(255,255,255,.55);margin-bottom:28px;line-height:1.6;}
+/* Ask Virtual Andy CTA */
+.andy-cta{display:flex;align-items:center;gap:16px;background:rgba(62,171,114,.1);border:1px solid rgba(62,171,114,.3);border-radius:12px;padding:18px 22px;max-width:560px;transition:all .2s;cursor:pointer;}
+.andy-cta:hover{background:rgba(62,171,114,.18);border-color:rgba(62,171,114,.5);transform:translateY(-1px);box-shadow:0 6px 20px rgba(62,171,114,.2);}
+.andy-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--g),var(--g2));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 4px 14px rgba(62,171,114,.3);}
+.andy-text{flex:1;}
+.andy-text strong{display:block;font-size:15px;font-weight:700;color:#fff;margin-bottom:3px;}
+.andy-text span{font-size:12px;color:rgba(255,255,255,.5);}
+.andy-arrow{font-size:20px;color:var(--g);}
+.hero-right{width:250px;flex-shrink:0;}
+.hcard{background:rgba(255,255,255,.06);border:1px solid rgba(62,171,114,.25);border-radius:14px;overflow:hidden;backdrop-filter:blur(8px);}
+.hcard-img{height:100px;overflow:hidden;}
+.hcard-img img{width:100%;height:100%;object-fit:cover;opacity:.7;}
+.hcard-body{padding:18px 20px;}
+.hcard-icon{font-size:22px;margin-bottom:8px;}
+.hcard h3{font-size:14px;font-weight:700;color:#fff;margin-bottom:7px;}
+.hcard p{font-size:12px;color:rgba(255,255,255,.45);line-height:1.55;margin-bottom:14px;}
+.hcard a{display:block;font-size:12px;color:var(--g);margin-bottom:6px;transition:opacity .15s;}
+.hcard a:hover{opacity:.75;}
+
+/* EQ */
+.eq-sec{background:var(--white);padding:26px 32px 30px;border-bottom:1px solid var(--border);}
+.sec-hd{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.sec-hd::after{content:'';flex:1;height:1px;background:var(--border);margin-left:4px;}
+.eq-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:10px;}
+.eq-t{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 8px 13px;text-align:center;cursor:pointer;transition:all .2s;display:block;color:inherit;}
+.eq-t:hover{border-color:var(--g);box-shadow:0 4px 16px rgba(62,171,114,.15);transform:translateY(-2px);}
+.eq-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:20px;transition:transform .2s;}
+.eq-t:hover .eq-ic{transform:scale(1.1);}
+.eq-t span{font-size:10px;color:#444;line-height:1.3;display:block;font-weight:500;}
+.ic-gr{background:linear-gradient(135deg,#d1fae5,#a7f3d0);}
+.ic-or{background:linear-gradient(135deg,#fef3c7,#fde68a);}
+.ic-bl{background:linear-gradient(135deg,#dbeafe,#bfdbfe);}
+.ic-re{background:linear-gradient(135deg,#fce7f3,#fbcfe8);}
+.ic-pu{background:linear-gradient(135deg,#ede9fe,#ddd6fe);}
+.ic-te{background:linear-gradient(135deg,#ccfbf1,#99f6e4);}
+.ic-am{background:linear-gradient(135deg,#fee2e2,#fecaca);}
+.ic-co{background:linear-gradient(135deg,#fef9c3,#fef08a);}
+
+/* ONBOARDING */
+.ob-sec{background:linear-gradient(160deg,var(--navy2) 0%,#0a2218 50%,var(--navy) 100%);padding:30px 32px;position:relative;overflow:hidden;}
+.ob-sec::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(62,171,114,.12),transparent 70%);pointer-events:none;}
+.ob-card{background:rgba(255,255,255,.05);border:1px solid rgba(62,171,114,.25);border-radius:16px;padding:26px;position:relative;z-index:1;}
+.ob-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px;}
+.ob-ico{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,rgba(62,171,114,.3),rgba(62,171,114,.1));border:1px solid rgba(62,171,114,.3);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.ob-meta{flex:1;}
+.ob-meta h3{font-size:15px;font-weight:700;color:#fff;margin:0 0 4px;}
+.ob-meta span{font-size:11px;color:rgba(255,255,255,.35);}
+.ob-pct strong{font-size:30px;font-weight:700;color:var(--g);display:block;line-height:1;text-align:right;}
+.ob-pct small{font-size:10px;color:rgba(255,255,255,.3);display:block;text-align:right;}
+.pb-row{display:flex;justify-content:space-between;margin-bottom:6px;}
+.pb-row span{font-size:10px;color:rgba(255,255,255,.35);}
+.pb-row strong{font-size:10px;color:var(--g);}
+.pb{height:6px;background:rgba(255,255,255,.1);border-radius:3px;margin-bottom:20px;overflow:hidden;}
+.pf{height:100%;width:40%;background:linear-gradient(90deg,var(--g2),var(--g));border-radius:3px;position:relative;}
+.pf::after{content:'';position:absolute;top:0;right:0;width:8px;height:100%;background:rgba(255,255,255,.3);border-radius:3px;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:.3;}50%{opacity:.8;}}
+.ob-phases{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px;}
+.ph{border-radius:10px;padding:12px 10px;}
+.ph-done{background:rgba(62,171,114,.15);border:1px solid rgba(62,171,114,.35);}
+.ph-now{background:rgba(62,171,114,.08);border:1px solid var(--g);}
+.ph-lock{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);}
+.ph-lbl{font-size:9px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:4px;letter-spacing:.02em;text-transform:uppercase;}
+.ph-done .ph-lbl{color:var(--g);}
+.ph-now .ph-lbl{color:var(--g);}
+.ph-lock .ph-lbl{color:rgba(255,255,255,.2);}
+.phi{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+.cid{width:13px;height:13px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;font-size:7px;color:#fff;flex-shrink:0;}
+.cie{width:13px;height:13px;border-radius:50%;border:1px solid rgba(255,255,255,.2);flex-shrink:0;}
+.phi span{font-size:10px;color:rgba(255,255,255,.65);}
+.phi .lk{color:rgba(255,255,255,.2);}
+.ob-ft{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.btn-g{background:linear-gradient(135deg,var(--g),var(--g2));color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(62,171,114,.3);transition:all .2s;display:inline-block;}
+.btn-g:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(62,171,114,.4);}
+.btn-ol{background:transparent;color:var(--g);border:1px solid rgba(62,171,114,.4);padding:10px 20px;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit;transition:all .2s;display:inline-block;}
+.btn-ol:hover{border-color:var(--g);background:rgba(62,171,114,.07);}
+.buddy{display:flex;align-items:center;gap:8px;margin-left:auto;}
+.buddy-av{width:28px;height:28px;border-radius:50%;background:rgba(62,171,114,.25);border:2px solid rgba(62,171,114,.4);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--g);}
+.buddy-av img{width:100%;height:100%;object-fit:cover;}
+.buddy span{font-size:11px;color:rgba(255,255,255,.4);}
+.buddy a{color:var(--g);font-size:11px;}
+
+/* 3-COL ROW */
+.three-sec{background:var(--neutral);padding:26px 32px 30px;}
+.three-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.cc{background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.04);transition:box-shadow .2s;}
+.cc:hover{box-shadow:0 6px 24px rgba(0,0,0,.09);}
+.cc-head{padding:13px 16px;display:flex;align-items:center;gap:9px;border-bottom:1px solid #f5f5f5;}
+.cc-hi{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.cc-hi.gr{background:var(--g3);}
+.cc-hi.pu{background:#ede9fe;}
+.cc-hi.or{background:#fef3c7;}
+.cc-head span{font-size:13px;font-weight:700;color:var(--navy);flex:1;letter-spacing:-.01em;}
+.cc-bdg{font-size:9px;padding:2px 7px;border-radius:10px;font-weight:600;}
+.cc-body{padding:10px 16px;}
+.cc-ft{padding:9px 16px;border-top:1px solid #f5f5f5;}
+.cc-ft a{font-size:11px;color:var(--g);font-weight:500;}
+.ur{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid #fafafa;}
+.ur:last-child{border-bottom:none;}
+.ur .di{font-size:12px;color:#ccc;flex-shrink:0;}
+.ur-n{font-size:11px;color:#374151;flex:1;line-height:1.3;}
+.bdg{font-size:9px;padding:2px 5px;border-radius:4px;font-weight:600;white-space:nowrap;}
+.bg-g2{background:#d1fae5;color:#065f46;}
+.bg-b2{background:#dbeafe;color:#1e40af;}
+.ur-d{font-size:9px;color:#9ca3af;white-space:nowrap;}
+.exp-row{display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid #fafafa;}
+.exp-row:last-child{border-bottom:none;}
+.exp-av{width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid var(--g3);}
+.exp-av img{width:100%;height:100%;object-fit:cover;}
+.exp-i{flex:1;}
+.exp-i p{font-size:12px;font-weight:600;color:#111827;margin:0;}
+.exp-i span{font-size:10px;color:#6b7280;}
+.btn-p{font-size:10px;color:var(--g);border:1px solid rgba(62,171,114,.35);border-radius:5px;padding:3px 9px;background:transparent;cursor:pointer;font-weight:500;transition:all .15s;}
+.btn-p:hover{background:var(--g3);}
+/* news section */
+.news-header{background:linear-gradient(135deg,var(--navy),#1a3a2a);border-radius:10px;padding:18px;margin-bottom:10px;text-align:center;cursor:pointer;transition:all .2s;}
+.news-header:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.15);}
+.news-header h4{font-size:14px;font-weight:700;color:#fff;margin-bottom:4px;}
+.news-header p{font-size:11px;color:rgba(255,255,255,.5);margin-bottom:12px;}
+.news-btn{display:inline-block;background:var(--g);color:#fff;padding:8px 18px;border-radius:7px;font-size:12px;font-weight:700;}
+.ni{padding:7px 0;border-bottom:1px solid #fafafa;}
+.ni:last-child{border-bottom:none;}
+.nbdg{font-size:9px;padding:2px 7px;border-radius:10px;font-weight:600;display:inline-block;margin-bottom:4px;}
+.ni h5{font-size:11px;font-weight:600;color:#111827;margin:0 0 2px;line-height:1.4;}
+.ni p{font-size:10px;color:#6b7280;margin:0;line-height:1.4;}
+.ni a{font-size:10px;color:var(--g);display:block;margin-top:3px;font-weight:500;}
+
+/* LOWER 3-COL */
+.lower-sec{background:var(--white);padding:26px 32px 30px;border-top:1px solid var(--border);}
+.lower-grid{display:grid;grid-template-columns:1fr 1fr 2fr;gap:14px;}
+.lc{background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);transition:box-shadow .2s;}
+.lc:hover{box-shadow:0 6px 24px rgba(0,0,0,.09);}
+.lc-head{padding:13px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #f5f5f5;}
+.lc-hi{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.lc-head span{font-size:13px;font-weight:700;color:var(--navy);}
+.lc-body{padding:10px 16px;}
+.lc-ft{padding:9px 16px;border-top:1px solid #f5f5f5;}
+.lc-ft a{font-size:11px;color:var(--g);font-weight:500;}
+.pr{display:flex;align-items:center;gap:9px;padding:7px 4px;border-bottom:1px solid #fafafa;cursor:pointer;transition:background .15s;border-radius:6px;}
+.pr:last-child{border-bottom:none;}
+.pr:hover{background:#fafafa;}
+.pr-ic{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.pr span{font-size:11px;color:#374151;flex:1;font-weight:500;}
+.pr-arr{font-size:12px;color:#d1d5db;}
+.ins-g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;}
+.ins-c{background:var(--soft);border:1px solid rgba(62,171,114,.18);border-radius:10px;padding:13px;transition:all .15s;}
+.ins-c:hover{border-color:var(--g);box-shadow:0 4px 14px rgba(62,171,114,.1);}
+.ins-bdg{font-size:9px;padding:2px 7px;border-radius:10px;display:inline-block;margin-bottom:7px;font-weight:700;}
+.ins-grn{background:#d1fae5;color:#065f46;}
+.ins-blu{background:#dbeafe;color:#1e40af;}
+.ins-c h5{font-size:11px;font-weight:700;color:var(--navy);margin:0 0 5px;line-height:1.4;}
+.ins-c p{font-size:10px;color:#6b7280;margin:0 0 9px;line-height:1.45;}
+.ins-c a{font-size:10px;color:var(--g);font-weight:600;}
+.ins-ft{display:flex;justify-content:space-between;align-items:center;}
+.arr-btns{display:flex;gap:6px;}
+.arr-btn{width:28px;height:28px;background:#fff;border:1px solid var(--border);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;color:#555;transition:all .15s;}
+.arr-btn:hover{border-color:var(--g);color:var(--g);}
+
+/* PROJECT + EXTERNAL */
+.proj-sec{background:linear-gradient(180deg,var(--soft) 0%,#e4f0e8 100%);padding:26px 32px 30px;}
+.proj-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;}
+.proj-card{background:#fff;border:1px solid #d1e8d9;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(62,171,114,.08);}
+.proj-head{padding:13px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #f0f0f0;background:linear-gradient(90deg,#fff,var(--soft));}
+.proj-head span{font-size:13px;font-weight:700;color:var(--navy);flex:1;}
+.proj-body{padding:10px 16px;}
+.proj-i{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #f5f5f5;}
+.proj-i:last-child{border-bottom:none;}
+.pdot{width:10px;height:10px;border-radius:50%;margin-top:4px;flex-shrink:0;}
+.pdot-a{background:var(--g);}
+.pdot-t{background:#2563eb;}
+.proj-inf{flex:1;}
+.proj-inf p{font-size:12px;font-weight:600;color:#0D1B2A;margin:0 0 3px;}
+.proj-inf small{font-size:10px;color:#6b7280;line-height:1.4;}
+.pbdg{font-size:9px;padding:3px 8px;border-radius:10px;font-weight:700;white-space:nowrap;}
+.pbdg-a{background:#d1fae5;color:#065f46;}
+.pbdg-t{background:#dbeafe;color:#1e40af;}
+.proj-ft{padding:9px 16px;border-top:1px solid #f0f0f0;}
+.proj-ft a{font-size:11px;color:var(--g);font-weight:500;}
+.ul-card{background:#fff;border:1px solid #d1e8d9;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(62,171,114,.08);}
+.ul-head{padding:13px 16px;border-bottom:1px solid #f0f0f0;background:linear-gradient(90deg,#fff,var(--soft));}
+.ul-head span{font-size:13px;font-weight:700;color:var(--navy);}
+.ul-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 14px;}
+.ul-i{display:flex;align-items:center;gap:9px;padding:9px 10px;background:var(--soft);border-radius:9px;cursor:pointer;transition:all .15s;border:1px solid transparent;}
+.ul-i:hover{border-color:var(--g);background:#e4f0e8;}
+.ul-ic{width:30px;height:30px;border-radius:8px;background:#fff;border:1px solid #d1e8d9;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.ul-i span{font-size:11px;color:#0D1B2A;font-weight:500;}
+
+/* FOOTER */
+footer{background:linear-gradient(90deg,var(--navy2),var(--navy));border-top:1px solid #1A3045;padding:26px 32px;}
+.footer-in{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.footer-brand p{font-size:16px;font-weight:700;color:#fff;margin:0 0 4px;}
+.footer-brand p em{color:var(--g);font-style:normal;}
+.footer-brand small{font-size:12px;color:rgba(255,255,255,.35);}
+.footer-links{display:flex;gap:22px;}
+.footer-links a{font-size:12px;color:rgba(255,255,255,.4);font-weight:500;}
+.footer-links a:hover{color:#fff;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">Crookes Walker <em>Consulting</em></div>
+  <div class="nav-links">
+    <a href="#" class="nl on">Home</a>
+    <a href="https://crookeswalker.sharepoint.com/sites/TechnicalLibrary" target="_parent" class="nl">Knowledge</a>
+    <a href="#" class="nl">Resources</a>
+    <a href="https://crookeswalker.sharepoint.com/sites/CWCIntranet/SitePages/Employee%20Directory.aspx" target="_parent" class="nl">People</a>
+    <a href="#" class="nl">Communities</a>
+    <a href="https://crookeswalker.sharepoint.com/sites/CWCIntranet/_layouts/15/news.aspx?title=Latest%20Updates&newsSource=1&instanceId=299416a7-4701-4099-93d7-d6b964162c57&webPartId=8c88f208-6c77-4bdb-86a0-0c47b4316588&serverRelativeUrl=%2Fsites%2FCWCIntranet%2FSitePages%2FHome.aspx&pagesListId=aa1bc4d0-b5ff-48cd-80b8-2d55f82ba838&locale=en-us" target="_parent" class="nl">News &amp; Updates</a>
+    <a href="#" class="nl">Help &amp; Support</a>
+  </div>
+  <div class="nav-r">
+    <span class="nav-ic">🔍</span>
+    <span class="nav-ic">🔔</span>
+    <div class="nav-av">AB</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-badge">🏢 CWC Intranet</div>
+      <h1>Technical <em>Guru</em></h1>
+      <p class="hero-sub">Find knowledge. Build capability. Deliver value.</p>
+      <a href="https://claude.ai/public/artifacts/01343607-0f07-424d-b735-6b3a0febb2ed" target="_blank" class="andy-cta">
+        <div class="andy-avatar">🤖</div>
+        <div class="andy-text">
+          <strong>Ask Virtual Andy</strong>
+          <span>Your AI-powered knowledge assistant — ask anything about CWC</span>
+        </div>
+        <div class="andy-arrow">›</div>
+      </a>
+    </div>
+    <div class="hero-right">
+      <div class="hcard">
+        <div class="hcard-img">
+          <img src="https://cwcon.co.uk/wp-content/uploads/2025/12/natural_england_header2-1080x675-1.webp" alt="CWC Project" />
+        </div>
+        <div class="hcard-body">
+          <div class="hcard-icon">📚</div>
+          <h3>Technical Library</h3>
+          <p>Centralised technical resources, best practice guidance and expertise — curated for our people.</p>
+          <a href="https://crookeswalker.sharepoint.com/sites/TechnicalLibrary" target="_parent">Browse Technical Library &rarr;</a>
+          <a href="https://crookeswalker.sharepoint.com/sites/TechnicalLibrary" target="_parent">How to contribute &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EMPLOYEE QUICK LINKS -->
+<section class="eq-sec">
+  <div class="sec-hd">⚡ Employee Quick Links</div>
+  <div class="eq-grid">
+    <a href="https://cwcq3.quantim.co.uk/default.aspx" target="_blank" class="eq-t">
+      <div class="eq-ic ic-gr">🕐</div><span>Timesheets</span>
+    </a>
+    <a href="https://cwcq3.quantim.co.uk/default.aspx" target="_blank" class="eq-t">
+      <div class="eq-ic ic-or">🧾</div><span>Expenses</span>
+    </a>
+    <a href="https://app.team-today.com/login" target="_blank" class="eq-t">
+      <div class="eq-ic ic-bl">🪑</div><span>Desk Booking</span>
+    </a>
+    <a href="https://cwcq3.quantim.co.uk/default.aspx" target="_blank" class="eq-t">
+      <div class="eq-ic ic-re">🌴</div><span>Holiday Requests</span>
+    </a>
+    <a href="https://crookeswalker.sharepoint.com/sites/CWCIntranet/SitePages/Agile%20Working.aspx?stay=true" target="_parent" class="eq-t">
+      <div class="eq-ic ic-pu">🎧</div><span>IT Issues</span>
+    </a>
+    <a href="https://crookeswalker.sharepoint.com/sites/CWCIntranet/SitePages/Policies.aspx" target="_parent" class="eq-t">
+      <div class="eq-ic ic-te">🏅</div><span>ISO Training</span>
+    </a>
+    <a href="mailto:lgower@cwcon.co.uk" class="eq-t">
+      <div class="eq-ic ic-am">🤒</div><span>Sick Leave</span>
+    </a>
+    <a href="https://crookeswalker.sharepoint.com/:w:/r/sites/CWCIntranet/_layouts/15/Doc.aspx?sourcedoc=%7B5C5F9250-A36D-4207-A625-B6D302BEE057%7D&file=Mental%20Health%20Policy.docx&action=default&mobileredirect=true" target="_parent" class="eq-t">
+      <div class="eq-ic ic-co">💚</div><span>Wellbeing Hub</span>
+    </a>
+  </div>
+</section>
+
+<!-- ONBOARDING -->
+<section class="ob-sec">
+  <div class="ob-card">
+    <div class="ob-top">
+      <div class="ob-ico">🗺</div>
+      <div class="ob-meta">
+        <h3>Welcome, Alex — Your Onboarding Journey</h3>
+        <span>Started 14 May 2025 &nbsp;·&nbsp; Target completion: 14 Jun 2025</span>
+      </div>
+      <div class="ob-pct">
+        <strong>40%</strong>
+        <small>complete</small>
+      </div>
+    </div>
+    <div class="pb-row"><span>Overall progress</span><strong>2 of 5 stages complete</strong></div>
+    <div class="pb"><div class="pf"></div></div>
+    <div class="ob-phases">
+      <div class="ph ph-done">
+        <div class="ph-lbl">✅ Day 1 — Arrival</div>
+        <div class="phi"><div class="cid">✓</div><span>ID &amp; access card</span></div>
+        <div class="phi"><div class="cid">✓</div><span>Laptop setup</span></div>
+        <div class="phi"><div class="cid">✓</div><span>Meet the team</span></div>
+      </div>
+      <div class="ph ph-done">
+        <div class="ph-lbl">✅ Week 1 — Foundations</div>
+        <div class="phi"><div class="cid">✓</div><span>CWC ways of working</span></div>
+        <div class="phi"><div class="cid">✓</div><span>Systems tour</span></div>
+        <div class="phi"><div class="cid">✓</div><span>Key contacts</span></div>
+      </div>
+      <div class="ph ph-now">
+        <div class="ph-lbl">⏳ Month 1 — Now</div>
+        <div class="phi"><div class="cie"></div><span>ISO training</span></div>
+        <div class="phi"><div class="cie"></div><span>H&amp;S induction</span></div>
+        <div class="phi"><div class="cie"></div><span>Project shadowing</span></div>
+      </div>
+      <div class="ph ph-lock">
+        <div class="ph-lbl">🔒 Month 2 — Practice</div>
+        <div class="phi"><div class="cie"></div><span class="lk">First project brief</span></div>
+        <div class="phi"><div class="cie"></div><span class="lk">Mentor check-in</span></div>
+        <div class="phi"><div class="cie"></div><span class="lk">CPD plan agreed</span></div>
+      </div>
+      <div class="ph ph-lock">
+        <div class="ph-lbl">🔒 Month 3 — Review</div>
+        <div class="phi"><div class="cie"></div><span class="lk">Probation review</span></div>
+        <div class="phi"><div class="cie"></div><span class="lk">Goals agreed</span></div>
+        <div class="phi"><div class="cie"></div><span class="lk">Programme complete</span></div>
+      </div>
+    </div>
+    <div class="ob-ft">
+      <a href="https://crookeswalker.sharepoint.com/sites/OnboardingTeam" target="_parent" class="btn-g">Continue — Month 1 &rarr;</a>
+      <a href="https://crookeswalker.sharepoint.com/sites/OnboardingTeam" target="_parent" class="btn-ol">View Full Journey</a>
+      <div class="buddy">
+        <div class="buddy-av">
+          <img src="https://cwcon.co.uk/wp-content/uploads/2025/12/JOHN_BARNETT-1.webp" alt="JB" onerror="this.style.display='none';this.parentElement.textContent='JB'"/>
+        </div>
+        <span>Buddy: John Barnett &nbsp;<a href="https://crookeswalker.sharepoint.com/sites/OnboardingTeam" target="_parent">· Message</a></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3-COLUMN ROW -->
+<section class="three-sec">
+  <div class="sec-hd" style="color:var(--navy);">🗂 Your Dashboard</div>
+  <div class="three-grid">
+
+    <!-- Recently Updated -->
+    <div class="cc">
+      <div class="cc-head">
+        <div class="cc-hi gr">🔄</div>
+        <span>Recently Updated</span>
+      </div>
+      <div class="cc-body">
+        <div class="ur"><span class="di">📄</span><span class="ur-n">NABERS UK v1.2 Technical Update</span><span class="bdg bg-g2">Updated</span><span class="ur-d">19 May</span></div>
+        <div class="ur"><span class="di">📄</span><span class="ur-n">EPC Methodology Guide</span><span class="bdg bg-g2">Updated</span><span class="ur-d">16 May</span></div>
+        <div class="ur"><span class="di">📄</span><span class="ur-n">Decarbonisation Pathways Playbook</span><span class="bdg bg-g2">Updated</span><span class="ur-d">14 May</span></div>
+        <div class="ur"><span class="di">📄</span><span class="ur-n">Climate Risk Assessment Template</span><span class="bdg bg-b2">New</span><span class="ur-d">12 May</span></div>
+        <div class="ur"><span class="di">📄</span><span class="ur-n">Net Zero Standard 2025</span><span class="bdg bg-g2">Updated</span><span class="ur-d">9 May</span></div>
+      </div>
+      <div class="cc-ft"><a href="https://crookeswalker.sharepoint.com/sites/CWCIntranet/_layouts/15/SeeAll.aspx?Page=%2Fsites%2FCWCIntranet%2FSitePages%2FHomepage-Draft-v1.aspx&InstanceId=a3480edc-9f4e-4c54-b6a5-59271a5b6dcb" target="_parent">View all recently updated &rarr;</a></div>
+    </div>
+
+    <!-- Expert Finder -->
+    <div class="cc">
+      <div class="cc-head">
+        <div class="cc-hi pu">🔍</div>
+        <span>Expert Finder</span>
+      </div>
+      <div class="cc-body">
+        <div class="exp-row">
+          <div class="exp-av"><img src="https://cwcon.co.uk/wp-content/uploads/2025/12/chris-skinner.webp" alt="Chris Skinner" onerror="this.outerHTML='<div style=width:36px;height:36px;border-radius:50%;background:#e8f5ee;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#2d7a52;flex-shrink:0>CS</div>'"/></div>
+          <div class="exp-i"><p>Chris Skinner</p><span>CEO</span></div>
+          <a href="https://crookeswalker.sharepoint.com/sites/CWCIntranet/SitePages/Employee%20Directory.aspx" target="_parent"><button class="btn-p">Profile</button></a>
+        </div>
+        <div class="exp-row">
+          <div class="exp-av"><img src="https://cwcon.co.uk/wp-content/uploads/2025/12/andy-ringland.webp" alt="Andrew Ringland" onerror="this.outerHTML='<div style=width:36px;height:36px;border-radius:50%;background:#e8f5ee;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#2d7a52;flex-shrink:0>AR</div>'"/></div>
+          <div class="exp-i"><p>Andrew Ringland</p><span>CTO</span></div>
+          <a href="https://crookeswalker.sharepoint.com/sites/CWCIntranet/SitePages/Employee%20Directory.aspx" target="_parent"><button class="btn-p">Profile</button></a>
+        </div>
+        <div class="exp-row">
+          <div class="exp-av"><img src="https://cwcon.co.uk/wp-content/uploads/2025/12/unnamed-file.webp" alt="Simon Woods" onerror="this.outerHTML='<div style=width:36px;height:36px;border-radius:50%;background:#e8f5ee;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#2d7a52;flex-shrink:0>SW</div>'"/></div>
+          <div class="exp-i"><p>Simon Woods</p><span>Associate Director</span></div>
+          <a href="https://crookeswalker.sharepoint.com/sites/CWCIntranet/SitePages/Employee%20Directory.aspx" target="_parent"><button class="btn-p">Profile</button></a>
+        </div>
+        <div class="exp-row">
+          <div class="exp-av"><img src="https://cwcon.co.uk/wp-content/uploads/2025/12/1760714827906-1.jpeg" alt="Gareth Rowlands" onerror="this.outerHTML='<div style=width:36px;height:36px;border-radius:50%;background:#e8f5ee;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#2d7a52;flex-shrink:0>GR</div>'"/></div>
+          <div class="exp-i"><p>Gareth Rowlands</p><span>Regional Director</span></div>
+          <a href="https://crookeswalker.sharepoint.com/sites/CWCIntranet/SitePages/Employee%20Directory.aspx" target="_parent"><button class="btn-p">Profile</button></a>
+        </div>
+      </div>
+      <div class="cc-ft"><a href="https://crookeswalker.sharepoint.com/sites/CWCIntranet/SitePages/Employee%20Directory.aspx" target="_parent">View all team members &rarr;</a></div>
+    </div>
+
+    <!-- Company News -->
+    <div class="cc">
+      <div class="cc-head">
+        <div class="cc-hi or">📰</div>
+        <span>Company News</span>
+      </div>
+      <div class="cc-body">
+        <a href="https://crookeswalker.sharepoint.com/sites/CWCIntranet/_layouts/15/news.aspx?title=Latest%20Updates&newsSource=1&instanceId=299416a7-4701-4099-93d7-d6b964162c57&webPartId=8c88f208-6c77-4bdb-86a0-0c47b4316588&serverRelativeUrl=%2Fsites%2FCWCIntranet%2FSitePages%2FHome.aspx&pagesListId=aa1bc4d0-b5ff-48cd-80b8-2d55f82ba838&locale=en-us" target="_parent" style="display:block;text-decoration:none;">
+          <div class="news-header">
+            <h4>📢 Latest CWC Updates</h4>
+            <p>Read the latest news, announcements and updates from across the business</p>
+            <span class="news-btn">View Latest News &rarr;</span>
+          </div>
+        </a>
+        <div class="ni">
+          <span class="nbdg bg-b2">Win</span>
+          <h5>New net zero framework contract awarded</h5>
+          <p>Expanding our sustainability portfolio.</p>
+          <a href="https://crookeswalker.sharepoint.com/sites/CWCIntranet/_layouts/15/news.aspx?title=Latest%20Updates&newsSource=1&instanceId=299416a7-4701-4099-93d7-d6b964162c57&webPartId=8c88f208-6c77-4bdb-86a0-0c47b4316588&serverRelativeUrl=%2Fsites%2FCWCIntranet%2FSitePages%2FHome.aspx&pagesListId=aa1bc4d0-b5ff-48cd-80b8-2d55f82ba838&locale=en-us" target="_parent">Read more &rarr;</a>
+        </div>
+        <div class="ni">
+          <span class="nbdg bg-g2">Achievement</span>
+          <h5>ISO 14001 recertification confirmed</h5>
+          <p>Environmental management milestone.</p>
+          <a href="https://crookeswalker.sharepoint.com/sites/CWCIntranet/_layouts/15/news.aspx?title=Latest%20Updates&newsSource=1&instanceId=299416a7-4701-4099-93d7-d6b964162c57&webPartId=8c88f208-6c77-4bdb-86a0-0c47b4316588&serverRelativeUrl=%2Fsites%2FCWCIntranet%2FSitePages%2FHome.aspx&pagesListId=aa1bc4d0-b5ff-48cd-80b8-2d55f82ba838&locale=en-us" target="_parent">Read more &rarr;</a>
+        </div>
+      </div>
+      <div class="cc-ft"><a href="https://crookeswalker.sharepoint.com/sites/CWCIntranet/_layouts/15/news.aspx?title=Latest%20Updates&newsSource=1&instanceId=299416a7-4701-4099-93d7-d6b964162c57&webPartId=8c88f208-6c77-4bdb-86a0-0c47b4316588&serverRelativeUrl=%2Fsites%2FCWCIntranet%2FSitePages%2FHome.aspx&pagesListId=aa1bc4d0-b5ff-48cd-80b8-2d55f82ba838&locale=en-us" target="_parent">View all news &rarr;</a></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- LOWER 3-COL -->
+<section class="lower-sec">
+  <div class="lower-grid">
+
+    <!-- People Policies -->
+    <div class="lc">
+      <div class="lc-head">
+        <div class="lc-hi" style="background:#fce7f3;">🧑‍💼</div>
+        <span>People Policies</span>
+      </div>
+      <div class="lc-body">
+        <a href="https://crookeswalker.sharepoint.com/:w:/r/sites/CWCIntranet/_layouts/15/Doc.aspx?sourcedoc=%7B277EBAF2-4CB7-463D-AAF7-EB99FED16580%7D&file=Agile%20Working%20Policy%20-%20Rev%202.docx&action=default&mobileredirect=true" target="_parent" class="pr">
+          <div class="pr-ic" style="background:#fce7f3;">🏠</div><span>Agile Working Policy</span><span class="pr-arr">›</span>
+        </a>
+        <a href="https://crookeswalker.sharepoint.com/:w:/r/sites/CWCIntranet/_layouts/15/Doc.aspx?sourcedoc=%7B05730D2A-66FE-446C-9D71-4CFFC9D8BAEF%7D&file=Maternity%20Policy.docx&action=default&mobileredirect=true" target="_parent" class="pr">
+          <div class="pr-ic" style="background:#fce7f3;">👶</div><span>Maternity Policy</span><span class="pr-arr">›</span>
+        </a>
+        <a href="https://crookeswalker.sharepoint.com/:w:/r/sites/CWCIntranet/_layouts/15/Doc.aspx?sourcedoc=%7B5C5F9250-A36D-4207-A625-B6D302BEE057%7D&file=Mental%20Health%20Policy.docx&action=default&mobileredirect=true" target="_parent" class="pr">
+          <div class="pr-ic" style="background:#d1fae5;">🧠</div><span>Mental Health Policy</span><span class="pr-arr">›</span>
+        </a>
+        <a href="https://crookeswalker.sharepoint.com/:w:/r/sites/CWCIntranet/_layouts/15/Doc.aspx?sourcedoc=%7B9FAA8E7B-AC2D-4959-88A6-0A1E1B51DD55%7D&file=Paternity%20Policy.docx&action=default&mobileredirect=true" target="_parent" class="pr">
+          <div class="pr-ic" style="background:#fef3c7;">👨‍👧</div><span>Paternity Policy</span><span class="pr-arr">›</span>
+        </a>
+        <a href="https://crookeswalker.sharepoint.com/:w:/r/sites/CWCIntranet/_layouts/15/Doc.aspx?sourcedoc=%7BE4FD1A56-FC3D-46C1-B987-6991CAE45B58%7D&file=Disciplinary%20Policy.docx&action=default&mobileredirect=true" target="_parent" class="pr">
+          <div class="pr-ic" style="background:#fee2e2;">⚖️</div><span>Disciplinary Policy</span><span class="pr-arr">›</span>
+        </a>
+      </div>
+      <div class="lc-ft"><a href="https://crookeswalker.sharepoint.com/sites/CWCIntranet/SitePages/Policies.aspx" target="_parent">View all policies &rarr;</a></div>
+    </div>
+
+    <!-- Employee Benefits -->
+    <div class="lc">
+      <div class="lc-head">
+        <div class="lc-hi" style="background:#d1fae5;">⭐</div>
+        <span>Employee Benefits</span>
+      </div>
+      <div class="lc-body">
+        <a href="https://my.paycircle.co.uk/login" target="_blank" class="pr">
+          <div class="pr-ic" style="background:#d1fae5;">💷</div><span>Payslips</span><span class="pr-arr">›</span>
+        </a>
+        <a href="https://yourplan.royallondon.com/" target="_blank" class="pr">
+          <div class="pr-ic" style="background:#dbeafe;">🏦</div><span>Pension Scheme</span><span class="pr-arr">›</span>
+        </a>
+        <a href="https://www.simplyhealth.co.uk/" target="_blank" class="pr">
+          <div class="pr-ic" style="background:#fce7f3;">❤️</div><span>Simply Health Plan</span><span class="pr-arr">›</span>
+        </a>
+        <a href="https://cwc.employeebenefitsplatform.com/" target="_blank" class="pr">
+          <div class="pr-ic" style="background:#fef3c7;">🎁</div><span>Employee Benefits Hub</span><span class="pr-arr">›</span>
+        </a>
+      </div>
+      <div class="lc-ft"><a href="https://crookeswalker.sharepoint.com/sites/CWCIntranet/SitePages/Benefits.aspx?stay=true" target="_parent">View all benefits &rarr;</a></div>
+    </div>
+
+    <!-- Curated Insights -->
+    <div class="lc">
+      <div class="lc-head">
+        <div class="lc-hi" style="background:#fef3c7;">💡</div>
+        <span>Curated Insights</span>
+      </div>
+      <div class="lc-body">
+        <div class="ins-g3">
+          <div class="ins-c">
+            <span class="ins-bdg ins-grn">Insight</span>
+            <h5>NABERS UK v1.2 — what it means</h5>
+            <p>Key updates and actions for project teams.</p>
+            <a href="https://cwcon.co.uk/industry-analysis/" target="_blank">Read &rarr;</a>
+          </div>
+          <div class="ins-c">
+            <span class="ins-bdg ins-blu">Guide</span>
+            <h5>EPC Reform: preparing for the future</h5>
+            <p>Upcoming changes and how to stay ahead.</p>
+            <a href="https://cwcon.co.uk/industry-analysis/" target="_blank">Read &rarr;</a>
+          </div>
+          <div class="ins-c">
+            <span class="ins-bdg ins-grn">Insight</span>
+            <h5>Decarbonisation pathways that deliver</h5>
+            <p>Practical strategies for measurable results.</p>
+            <a href="https://cwcon.co.uk/sustainable-futures/" target="_blank">Read &rarr;</a>
+          </div>
+        </div>
+        <div class="ins-ft">
+          <a href="https://cwcon.co.uk/industry-analysis/" target="_blank" style="font-size:11px;color:var(--g);font-weight:500;">View all insights &rarr;</a>
+          <div class="arr-btns">
+            <button class="arr-btn">&#9664;</button>
+            <button class="arr-btn">&#9654;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECT SPOTLIGHT + EXTERNAL LINKS -->
+<section class="proj-sec">
+  <div class="proj-grid">
+
+    <div class="proj-card">
+      <div class="proj-head">
+        <span style="font-size:16px;">🏗</span>
+        <span>Project Spotlight</span>
+        <span class="pbdg pbdg-a">From our work</span>
+      </div>
+      <div class="proj-body">
+        <div class="proj-i">
+          <div class="pdot pdot-a"></div>
+          <div class="proj-inf">
+            <p>Aviary — Manchester</p>
+            <small>Commercial Office · MEP Design · Lead: Simon Woods</small>
+          </div>
+          <a href="https://cwcon.co.uk/aviary/" target="_blank"><span class="pbdg pbdg-a">View</span></a>
+        </div>
+        <div class="proj-i">
+          <div class="pdot pdot-a"></div>
+          <div class="proj-inf">
+            <p>LJMU Estate Decarbonisation Plan — Liverpool</p>
+            <small>Education · Net Zero Carbon · Lead: Chris Skinner</small>
+          </div>
+          <a href="https://cwcon.co.uk/ljmu-estate-decarbonisation-plan/" target="_blank"><span class="pbdg pbdg-a">View</span></a>
+        </div>
+        <div class="proj-i">
+          <div class="pdot pdot-t"></div>
+          <div class="proj-inf">
+            <p>NHS Carbon Roadmaps — Leeds</p>
+            <small>Healthcare · Building Physics · Lead: Andrew Ringland</small>
+          </div>
+          <a href="https://cwcon.co.uk/healthcare/" target="_blank"><span class="pbdg pbdg-t">View</span></a>
+        </div>
+        <div class="proj-i">
+          <div class="pdot pdot-a"></div>
+          <div class="proj-inf">
+            <p>Natural England Research Bases — Lindisfarne</p>
+            <small>Mixed Use · MEP Surveys · Lead: Gareth Rowlands</small>
+          </div>
+          <a href="https://cwcon.co.uk/natural-england-research-bases/" target="_blank"><span class="pbdg pbdg-a">View</span></a>
+        </div>
+      </div>
+      <div class="proj-ft"><a href="https://cwcon.co.uk/project-spotlights/" target="_blank">View all projects &rarr;</a></div>
+    </div>
+
+    <div class="ul-card">
+      <div class="ul-head"><span>🔗 Useful External Links</span></div>
+      <div class="ul-grid">
+        <a href="https://www.cibse.org" target="_blank" class="ul-i"><div class="ul-ic">🏛</div><span>CIBSE</span></a>
+        <a href="https://www.breeam.com" target="_blank" class="ul-i"><div class="ul-ic">🌿</div><span>BREEAM Portal</span></a>
+        <a href="https://www.nabers.gov.au/uk" target="_blank" class="ul-i"><div class="ul-ic">📊</div><span>NABERS UK</span></a>
+        <a href="https://www.rics.org" target="_blank" class="ul-i"><div class="ul-ic">📋</div><span>RICS Guidance</span></a>
+        <a href="https://www.planningportal.co.uk" target="_blank" class="ul-i"><div class="ul-ic">🏛</div><span>Planning Portal</span></a>
+        <a href="https://www.gov.uk/find-energy-certificate" target="_blank" class="ul-i"><div class="ul-ic">⚡</div><span>EPC Register</span></a>
+        <a href="https://www.climatewatchdata.org" target="_blank" class="ul-i"><div class="ul-ic">🌍</div><span>Net Zero Tracker</span></a>
+        <a href="https://www.ukgbc.org" target="_blank" class="ul-i"><div class="ul-ic">🏢</div><span>UKGBC</span></a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-in">
+    <div class="footer-brand">
+      <p>Crookes Walker <em>Consulting</em></p>
+      <small>Building a sustainable and resilient future.</small>
+    </div>
+    <nav class="footer-links">
+      <a href="https://cwcon.co.uk/about/" target="_blank">About CWC</a>
+      <a href="https://cwcon.co.uk/services/" target="_blank">Our Services</a>
+      <a href="https://cwcon.co.uk/contact/" target="_blank">Contact</a>
+      <a href="#" target="_parent">Help &amp; Support</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+function notifyHeight(){var h=document.body.scrollHeight;window.parent.postMessage({frameHeight:h},'*');}
+window.addEventListener('load',notifyHeight);
+window.addEventListener('resize',notifyHeight);
+setInterval(notifyHeight,500);
+</script>
+</body>
+</html>
