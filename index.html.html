@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CWC Knowledge Engine</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{font-family:'Segoe UI',system-ui,sans-serif;width:100%;overflow-x:hidden;background:#f4f4f4;}
+a{text-decoration:none;}
+
+:root{
+  --g:#3EAB72;--g2:#2d8f5e;--g3:#e8f5ee;
+  --navy:#0D1B2A;--navy2:#0a1520;--navy3:#162535;
+  --soft:#f0f7f4;--neutral:#f2f3f5;--white:#fff;
+  --grey:#6b7280;--border:#e5e7eb;
+}
+
+/* ══ NAV ══ */
+.nav{background:linear-gradient(90deg,var(--navy2) 0%,var(--navy) 100%);padding:0 32px;display:flex;align-items:center;height:52px;position:sticky;top:0;z-index:200;box-shadow:0 2px 20px rgba(0,0,0,.35);}
+.nav-logo{font-size:15px;font-weight:700;color:#fff;margin-right:28px;white-space:nowrap;letter-spacing:-.02em;}
+.nav-logo em{color:var(--g);font-style:normal;}
+.nav-links{display:flex;flex:1;}
+.nl{font-size:12px;color:rgba(255,255,255,.55);padding:0 11px;height:52px;display:flex;align-items:center;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s;}
+.nl.on{color:#fff;border-bottom-color:var(--g);}
+.nl:hover{color:#fff;}
+.nav-r{display:flex;align-items:center;gap:10px;}
+.nav-ic{font-size:18px;color:rgba(255,255,255,.45);cursor:pointer;transition:color .15s;}
+.nav-ic:hover{color:#fff;}
+.nav-av{width:32px;height:32px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;cursor:pointer;border:2px solid rgba(255,255,255,.2);}
+
+/* ══ HERO ══ */
+.hero{background:var(--navy2);padding:44px 32px 40px;position:relative;overflow:hidden;}
+/* mesh gradient overlay */
+.hero::before{content:'';position:absolute;inset:0;background:
+  radial-gradient(ellipse 80% 60% at 70% 50%, rgba(62,171,114,.12) 0%, transparent 60%),
+  radial-gradient(ellipse 50% 80% at 90% 10%, rgba(62,171,114,.08) 0%, transparent 50%),
+  radial-gradient(ellipse 40% 40% at 10% 90%, rgba(30,80,120,.15) 0%, transparent 50%);
+pointer-events:none;}
+/* dot matrix */
+.hero::after{content:'';position:absolute;top:0;right:0;width:60%;height:100%;
+  background-image:radial-gradient(circle,rgba(62,171,114,.2) 1px,transparent 1px);
+  background-size:24px 24px;
+  -webkit-mask-image:linear-gradient(to left,rgba(0,0,0,.65) 0%,rgba(0,0,0,.15) 55%,transparent 100%);
+  mask-image:linear-gradient(to left,rgba(0,0,0,.65) 0%,rgba(0,0,0,.15) 55%,transparent 100%);
+  pointer-events:none;}
+.hero-inner{display:flex;gap:32px;align-items:center;position:relative;z-index:1;}
+.hero-left{flex:1.5;min-width:0;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(62,171,114,.12);color:var(--g);border:1px solid rgba(62,171,114,.3);border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:5px 14px;margin-bottom:18px;}
+.hero-left h1{font-size:44px;font-weight:700;color:#fff;line-height:1.05;margin-bottom:12px;letter-spacing:-.02em;}
+.hero-left h1 em{color:var(--g);font-style:normal;}
+.hero-sub{font-size:14px;color:rgba(255,255,255,.55);margin-bottom:26px;line-height:1.6;}
+.srch{display:flex;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.15);margin-bottom:18px;max-width:580px;box-shadow:0 4px 20px rgba(0,0,0,.2);}
+.srch input{flex:1;padding:13px 18px;background:rgba(255,255,255,.07);border:none;color:#fff;font-size:13px;outline:none;font-family:inherit;}
+.srch input::placeholder{color:rgba(255,255,255,.3);}
+.srch button{background:var(--g);color:#fff;border:none;padding:13px 26px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s;letter-spacing:.02em;}
+.srch button:hover{background:var(--g2);}
+.pills{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.pill-lbl{font-size:11px;color:rgba(255,255,255,.3);}
+.pill{padding:4px 12px;border:1px solid rgba(255,255,255,.18);border-radius:14px;font-size:11px;color:rgba(255,255,255,.6);cursor:pointer;transition:all .15s;}
+.pill:hover{border-color:var(--g);color:var(--g);}
+.hero-right{width:250px;flex-shrink:0;}
+.hcard{background:rgba(255,255,255,.06);border:1px solid rgba(62,171,114,.25);border-radius:14px;padding:22px;backdrop-filter:blur(8px);}
+.hcard-icon{font-size:26px;margin-bottom:10px;}
+.hcard h3{font-size:15px;font-weight:700;color:#fff;margin-bottom:8px;}
+.hcard p{font-size:12px;color:rgba(255,255,255,.45);line-height:1.55;margin-bottom:18px;}
+.hcard a{display:block;font-size:12px;color:var(--g);margin-bottom:7px;transition:opacity .15s;}
+.hcard a:hover{opacity:.75;}
+.hcard-img{height:72px;margin-top:16px;background:linear-gradient(135deg,rgba(62,171,114,.15),rgba(30,80,120,.2));border-radius:9px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.07);}
+.hcard-img span{font-size:11px;color:rgba(255,255,255,.2);}
+
+/* ══ EQ SECTION ══ */
+.eq-sec{background:var(--white);padding:26px 32px 30px;border-bottom:1px solid var(--border);}
+.sec-hd{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:8px;letter-spacing:-.01em;}
+.sec-hd::after{content:'';flex:1;height:1px;background:var(--border);margin-left:4px;}
+.eq-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:10px;}
+.eq-t{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 8px 13px;text-align:center;cursor:pointer;transition:all .2s;}
+.eq-t:hover{border-color:var(--g);box-shadow:0 4px 16px rgba(62,171,114,.15);transform:translateY(-2px);}
+.eq-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:20px;transition:transform .2s;}
+.eq-t:hover .eq-ic{transform:scale(1.1);}
+.eq-t span{font-size:10px;color:#444;line-height:1.3;display:block;font-weight:500;}
+.ic-gr{background:linear-gradient(135deg,#d1fae5,#a7f3d0);}
+.ic-or{background:linear-gradient(135deg,#fef3c7,#fde68a);}
+.ic-bl{background:linear-gradient(135deg,#dbeafe,#bfdbfe);}
+.ic-re{background:linear-gradient(135deg,#fce7f3,#fbcfe8);}
+.ic-pu{background:linear-gradient(135deg,#ede9fe,#ddd6fe);}
+.ic-te{background:linear-gradient(135deg,#ccfbf1,#99f6e4);}
+.ic-am{background:linear-gradient(135deg,#fef9c3,#fef08a);}
+.ic-co{background:linear-gradient(135deg,#fee2e2,#fecaca);}
+
+/* ══ ONBOARDING ══ */
+.ob-sec{background:linear-gradient(160deg,var(--navy2) 0%,#0a2218 50%,var(--navy) 100%);padding:30px 32px;position:relative;overflow:hidden;}
+.ob-sec::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(62,171,114,.12),transparent 70%);pointer-events:none;}
+.ob-sec::after{content:'';position:absolute;bottom:-40px;left:10%;width:200px;height:200px;background:radial-gradient(circle,rgba(62,171,114,.07),transparent 70%);pointer-events:none;}
+.ob-card{background:rgba(255,255,255,.05);border:1px solid rgba(62,171,114,.25);border-radius:16px;padding:26px;position:relative;z-index:1;backdrop-filter:blur(4px);}
+.ob-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px;}
+.ob-ico{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,rgba(62,171,114,.3),rgba(62,171,114,.1));border:1px solid rgba(62,171,114,.3);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.ob-meta{flex:1;}
+.ob-meta h3{font-size:15px;font-weight:700;color:#fff;margin:0 0 4px;letter-spacing:-.01em;}
+.ob-meta span{font-size:11px;color:rgba(255,255,255,.35);}
+.ob-pct strong{font-size:30px;font-weight:700;color:var(--g);display:block;line-height:1;text-align:right;letter-spacing:-.02em;}
+.ob-pct small{font-size:10px;color:rgba(255,255,255,.3);display:block;text-align:right;}
+.pb-row{display:flex;justify-content:space-between;margin-bottom:6px;}
+.pb-row span{font-size:10px;color:rgba(255,255,255,.35);}
+.pb-row strong{font-size:10px;color:var(--g);}
+.pb{height:6px;background:rgba(255,255,255,.1);border-radius:3px;margin-bottom:20px;overflow:hidden;}
+.pf{height:100%;width:40%;background:linear-gradient(90deg,var(--g2),var(--g));border-radius:3px;position:relative;}
+.pf::after{content:'';position:absolute;top:0;right:0;width:8px;height:100%;background:rgba(255,255,255,.3);border-radius:3px;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:.3;}50%{opacity:.8;}}
+.ob-phases{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px;}
+.ph{border-radius:10px;padding:12px 10px;}
+.ph-done{background:rgba(62,171,114,.15);border:1px solid rgba(62,171,114,.35);}
+.ph-now{background:rgba(62,171,114,.08);border:1px solid var(--g);}
+.ph-lock{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);}
+.ph-lbl{font-size:9px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:4px;letter-spacing:.02em;text-transform:uppercase;}
+.ph-done .ph-lbl{color:var(--g);}
+.ph-now .ph-lbl{color:var(--g);}
+.ph-lock .ph-lbl{color:rgba(255,255,255,.2);}
+.phi{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+.cid{width:13px;height:13px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;font-size:7px;color:#fff;flex-shrink:0;}
+.cie{width:13px;height:13px;border-radius:50%;border:1px solid rgba(255,255,255,.2);flex-shrink:0;}
+.phi span{font-size:10px;color:rgba(255,255,255,.65);}
+.phi .lk{color:rgba(255,255,255,.2);}
+.ob-ft{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.btn-g{background:linear-gradient(135deg,var(--g),var(--g2));color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 4px 14px rgba(62,171,114,.3);transition:all .2s;}
+.btn-g:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(62,171,114,.4);}
+.btn-ol{background:transparent;color:var(--g);border:1px solid rgba(62,171,114,.4);padding:10px 20px;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.btn-ol:hover{border-color:var(--g);background:rgba(62,171,114,.07);}
+.buddy{display:flex;align-items:center;gap:8px;margin-left:auto;}
+.buddy-av{width:28px;height:28px;border-radius:50%;background:rgba(62,171,114,.25);border:2px solid rgba(62,171,114,.4);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--g);overflow:hidden;}
+.buddy-av img{width:100%;height:100%;object-fit:cover;}
+.buddy span{font-size:11px;color:rgba(255,255,255,.4);}
+.buddy a{color:var(--g);font-size:11px;}
+
+/* ══ 4-COL ══ */
+.four-sec{background:var(--neutral);padding:26px 32px 30px;}
+.four-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.cc{background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.04);transition:box-shadow .2s;}
+.cc:hover{box-shadow:0 6px 24px rgba(0,0,0,.09);}
+.cc-head{padding:13px 16px;display:flex;align-items:center;gap:9px;border-bottom:1px solid #f5f5f5;}
+.cc-hi{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.cc-hi.gr{background:var(--g3);}
+.cc-hi.bl{background:#dbeafe;}
+.cc-hi.pu{background:#ede9fe;}
+.cc-hi.or{background:#fef3c7;}
+.cc-head span{font-size:13px;font-weight:700;color:var(--navy);flex:1;letter-spacing:-.01em;}
+.cc-bdg{font-size:9px;padding:2px 7px;border-radius:10px;font-weight:600;}
+.cc-body{padding:10px 16px;}
+.cc-ft{padding:9px 16px;border-top:1px solid #f5f5f5;}
+.cc-ft a{font-size:11px;color:var(--g);font-weight:500;}
+/* updates */
+.ur{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid #fafafa;}
+.ur:last-child{border-bottom:none;}
+.ur .di{font-size:12px;color:#ccc;flex-shrink:0;}
+.ur-n{font-size:11px;color:#374151;flex:1;line-height:1.3;}
+.bdg{font-size:9px;padding:2px 5px;border-radius:4px;font-weight:600;white-space:nowrap;}
+.bg-g2{background:#d1fae5;color:#065f46;}
+.bg-b2{background:#dbeafe;color:#1e40af;}
+.ur-d{font-size:9px;color:#9ca3af;white-space:nowrap;}
+/* events */
+.ev{display:flex;gap:10px;padding:6px 0;border-bottom:1px solid #fafafa;align-items:flex-start;}
+.ev:last-child{border-bottom:none;}
+.ev-cal{width:36px;flex-shrink:0;background:var(--navy);border-radius:8px;text-align:center;padding:5px 0;}
+.ev-day{font-size:16px;font-weight:700;color:var(--g);line-height:1;}
+.ev-mon{font-size:8px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.05em;}
+.ev-inf p{font-size:11px;font-weight:600;color:#111827;margin:0 0 2px;}
+.ev-inf span{font-size:10px;color:#6b7280;}
+.ev-t{font-size:9px;padding:2px 6px;border-radius:4px;display:inline-block;margin-top:3px;font-weight:600;}
+.et-m{background:#fce7f3;color:#9d174d;}
+.et-tr{background:#d1fae5;color:#065f46;}
+.et-cpd{background:#fef3c7;color:#92400e;}
+/* experts with real photos */
+.exp-row{display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid #fafafa;}
+.exp-row:last-child{border-bottom:none;}
+.exp-av{width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid var(--g3);}
+.exp-av img{width:100%;height:100%;object-fit:cover;}
+.exp-i{flex:1;}
+.exp-i p{font-size:12px;font-weight:600;color:#111827;margin:0;}
+.exp-i span{font-size:10px;color:#6b7280;}
+.btn-p{font-size:10px;color:var(--g);border:1px solid rgba(62,171,114,.35);border-radius:5px;padding:3px 9px;background:transparent;cursor:pointer;font-weight:500;transition:all .15s;}
+.btn-p:hover{background:var(--g3);}
+/* news */
+.ni{padding:7px 0;border-bottom:1px solid #fafafa;}
+.ni:last-child{border-bottom:none;}
+.ni-img{height:54px;border-radius:9px;margin-bottom:7px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:24px;opacity:.6;}
+.ni-img.nav-bg{background:linear-gradient(135deg,var(--navy),#1a3a2a);}
+.ni-img.green-bg{background:linear-gradient(135deg,#0a2818,#1a4030);}
+.nbdg{font-size:9px;padding:2px 7px;border-radius:10px;font-weight:600;display:inline-block;margin-bottom:5px;}
+.ni h5{font-size:11px;font-weight:600;color:#111827;margin:0 0 3px;line-height:1.4;}
+.ni p{font-size:10px;color:#6b7280;margin:0;line-height:1.4;}
+.ni a{font-size:10px;color:var(--g);display:block;margin-top:4px;font-weight:500;}
+
+/* ══ LOWER 3-COL ══ */
+.lower-sec{background:var(--white);padding:26px 32px 30px;border-top:1px solid var(--border);}
+.lower-grid{display:grid;grid-template-columns:1fr 1fr 2fr;gap:14px;}
+.lc{background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);transition:box-shadow .2s;}
+.lc:hover{box-shadow:0 6px 24px rgba(0,0,0,.09);}
+.lc-head{padding:13px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #f5f5f5;}
+.lc-hi{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.lc-head span{font-size:13px;font-weight:700;color:var(--navy);letter-spacing:-.01em;}
+.lc-body{padding:10px 16px;}
+.lc-ft{padding:9px 16px;border-top:1px solid #f5f5f5;}
+.lc-ft a{font-size:11px;color:var(--g);font-weight:500;}
+/* policy rows */
+.pr{display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid #fafafa;cursor:pointer;transition:background .15s;border-radius:6px;padding-left:4px;padding-right:4px;}
+.pr:last-child{border-bottom:none;}
+.pr:hover{background:#fafafa;}
+.pr-ic{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.pr span{font-size:11px;color:#374151;flex:1;font-weight:500;}
+.pr-arr{font-size:12px;color:#d1d5db;}
+/* template rows — now employee benefits */
+.tr{display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid #fafafa;cursor:pointer;transition:background .15s;border-radius:6px;padding-left:4px;padding-right:4px;}
+.tr:last-child{border-bottom:none;}
+.tr:hover{background:#fafafa;}
+.tr-ic{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.tr span{font-size:11px;color:#374151;flex:1;font-weight:500;}
+/* insights */
+.ins-g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;}
+.ins-c{background:var(--soft);border:1px solid rgba(62,171,114,.18);border-radius:10px;padding:13px;transition:all .15s;}
+.ins-c:hover{border-color:var(--g);box-shadow:0 4px 14px rgba(62,171,114,.1);}
+.ins-bdg{font-size:9px;padding:2px 7px;border-radius:10px;display:inline-block;margin-bottom:7px;font-weight:700;letter-spacing:.03em;}
+.ins-grn{background:#d1fae5;color:#065f46;}
+.ins-blu{background:#dbeafe;color:#1e40af;}
+.ins-c h5{font-size:11px;font-weight:700;color:var(--navy);margin:0 0 5px;line-height:1.4;}
+.ins-c p{font-size:10px;color:#6b7280;margin:0 0 9px;line-height:1.45;}
+.ins-c a{font-size:10px;color:var(--g);font-weight:600;}
+.ins-ft{display:flex;justify-content:space-between;align-items:center;}
+.arr-btns{display:flex;gap:6px;}
+.arr-btn{width:28px;height:28px;background:#fff;border:1px solid var(--border);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;color:#555;transition:all .15s;}
+.arr-btn:hover{border-color:var(--g);color:var(--g);}
+
+/* ══ PROJECT + EXTERNAL ══ */
+.proj-sec{background:linear-gradient(180deg,var(--soft) 0%,#e4f0e8 100%);padding:26px 32px 30px;}
+.proj-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:14px;}
+.proj-card{background:#fff;border:1px solid #d1e8d9;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(62,171,114,.08);}
+.proj-head{padding:13px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #f0f0f0;background:linear-gradient(90deg,#fff,var(--soft));}
+.proj-head span{font-size:13px;font-weight:700;color:var(--navy);flex:1;letter-spacing:-.01em;}
+.proj-body{padding:10px 16px;}
+.proj-i{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #f5f5f5;}
+.proj-i:last-child{border-bottom:none;}
+.pdot{width:10px;height:10px;border-radius:50%;margin-top:4px;flex-shrink:0;}
+.pdot-a{background:var(--g);}
+.pdot-t{background:#2563eb;}
+.proj-inf{flex:1;}
+.proj-inf p{font-size:12px;font-weight:600;color:#0D1B2A;margin:0 0 3px;}
+.proj-inf small{font-size:10px;color:#6b7280;line-height:1.4;}
+.pbdg{font-size:9px;padding:3px 8px;border-radius:10px;font-weight:700;white-space:nowrap;align-self:center;}
+.pbdg-a{background:#d1fae5;color:#065f46;}
+.pbdg-t{background:#dbeafe;color:#1e40af;}
+.proj-ft{padding:9px 16px;border-top:1px solid #f0f0f0;}
+.proj-ft a{font-size:11px;color:var(--g);font-weight:500;}
+.ul-card{background:#fff;border:1px solid #d1e8d9;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(62,171,114,.08);}
+.ul-head{padding:13px 16px;border-bottom:1px solid #f0f0f0;background:linear-gradient(90deg,#fff,var(--soft));}
+.ul-head span{font-size:13px;font-weight:700;color:var(--navy);letter-spacing:-.01em;}
+.ul-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 14px;}
+.ul-i{display:flex;align-items:center;gap:9px;padding:9px 10px;background:var(--soft);border-radius:9px;cursor:pointer;transition:all .15s;border:1px solid transparent;}
+.ul-i:hover{border-color:var(--g);background:#e4f0e8;box-shadow:0 2px 8px rgba(62,171,114,.12);}
+.ul-ic{width:30px;height:30px;border-radius:8px;background:#fff;border:1px solid #d1e8d9;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.ul-i span{font-size:11px;color:#0D1B2A;font-weight:500;}
+
+/* ══ FOOTER ══ */
+footer{background:linear-gradient(90deg,var(--navy2),var(--navy));border-top:1px solid #1A3045;padding:26px 32px;}
+.footer-in{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.footer-brand p{font-size:16px;font-weight:700;color:#fff;margin:0 0 4px;letter-spacing:-.01em;}
+.footer-brand p em{color:var(--g);font-style:normal;}
+.footer-brand small{font-size:12px;color:rgba(255,255,255,.35);}
+.footer-links{display:flex;gap:22px;}
+.footer-links a{font-size:12px;color:rgba(255,255,255,.4);transition:color .15s;font-weight:500;}
+.footer-links a:hover{color:#fff;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">Crookes Walker <em>Consulting</em></div>
+  <div class="nav-links">
+    <a href="#" class="nl on">Home</a>
+    <a href="#" class="nl">Knowledge</a>
+    <a href="#" class="nl">Resources</a>
+    <a href="#" class="nl">People</a>
+    <a href="#" class="nl">Communities</a>
+    <a href="#" class="nl">News &amp; Updates</a>
+    <a href="#" class="nl">Help &amp; Support</a>
+  </div>
+  <div class="nav-r">
+    <span class="nav-ic">🔍</span>
+    <span class="nav-ic">🔔</span>
+    <div class="nav-av">AB</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-badge">🏢 CWC Intranet</div>
+      <h1>Knowledge <em>Engine</em></h1>
+      <p class="hero-sub">Find knowledge. Build capability. Deliver value.</p>
+      <div class="srch">
+        <input type="text" placeholder="Search knowledge, guidance, policies, people and more..."/>
+        <button>Search</button>
+      </div>
+      <div class="pills">
+        <span class="pill-lbl">Popular:</span>
+        <span class="pill">NABERS</span>
+        <span class="pill">EPC</span>
+        <span class="pill">Decarbonisation</span>
+        <span class="pill">Risk Management</span>
+        <span class="pill">Net Zero</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hcard">
+        <div class="hcard-icon">📚</div>
+        <h3>Your knowledge hub</h3>
+        <p>Centralised insights, best practice and technical expertise — curated for our people and clients.</p>
+        <a href="#">About Knowledge Engine &rarr;</a>
+        <a href="#">How to contribute &rarr;</a>
+        <div class="hcard-img"><span>[ CWC Building Image ]</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EMPLOYEE QUICK LINKS -->
+<section class="eq-sec">
+  <div class="sec-hd">⚡ Employee Quick Links</div>
+  <div class="eq-grid">
+    <div class="eq-t"><div class="eq-ic ic-gr">🕐</div><span>Timesheets</span></div>
+    <div class="eq-t"><div class="eq-ic ic-or">🧾</div><span>Expenses</span></div>
+    <div class="eq-t"><div class="eq-ic ic-bl">🪑</div><span>Desk Booking</span></div>
+    <div class="eq-t"><div class="eq-ic ic-re">🌴</div><span>Holiday Requests</span></div>
+    <div class="eq-t"><div class="eq-ic ic-pu">🎧</div><span>IT Issues</span></div>
+    <div class="eq-t"><div class="eq-ic ic-te">🏅</div><span>ISO Training</span></div>
+    <div class="eq-t"><div class="eq-ic ic-am">📈</div><span>CPD Tracker</span></div>
+    <div class="eq-t"><div class="eq-ic ic-co">💚</div><span>Wellbeing Hub</span></div>
+  </div>
+</section>
+
+<!-- ONBOARDING -->
+<section class="ob-sec">
+  <div class="ob-card">
+    <div class="ob-top">
+      <div class="ob-ico">🗺</div>
+      <div class="ob-meta">
+        <h3>Welcome, Alex — Your Onboarding Journey</h3>
+        <span>Started 14 May 2025 &nbsp;·&nbsp; Target completion: 14 Jun 2025</span>
+      </div>
+      <div class="ob-pct">
+        <strong>40%</strong>
+        <small>complete</small>
+      </div>
+    </div>
+    <div class="pb-row"><span>Overall progress</span><strong>2 of 5 stages complete</strong></div>
+    <div class="pb"><div class="pf"></div></div>
+    <div class="ob-phases">
+      <div class="ph ph-done">
+        <div class="ph-lbl">✅ Day 1 — Arrival</div>
+        <div class="phi"><div class="cid">✓</div><span>ID &amp; access card</span></div>
+        <div class="phi"><div class="cid">✓</div><span>Laptop setup</span></div>
+        <div class="phi"><div class="cid">✓</div><span>Meet the team</span></div>
+      </div>
+      <div class="ph ph-done">
+        <div class="ph-lbl">✅ Week 1 — Foundations</div>
+        <div class="phi"><div class="cid">✓</div><span>CWC ways of working</span></div>
+        <div class="phi"><div class="cid">✓</div><span>Systems tour</span></div>
+        <div class="phi"><div class="cid">✓</div><span>Key contacts</span></div>
+      </div>
+      <div class="ph ph-now">
+        <div class="ph-lbl">⏳ Month 1 — Now</div>
+        <div class="phi"><div class="cie"></div><span>ISO training</span></div>
+        <div class="phi"><div class="cie"></div><span>H&amp;S induction</span></div>
+        <div class="phi"><div class="cie"></div><span>Project shadowing</span></div>
+      </div>
+      <div class="ph ph-lock">
+        <div class="ph-lbl">🔒 Month 2 — Practice</div>
+        <div class="phi"><div class="cie"></div><span class="lk">First project brief</span></div>
+        <div class="phi"><div class="cie"></div><span class="lk">Mentor check-in</span></div>
+        <div class="phi"><div class="cie"></div><span class="lk">CPD plan agreed</span></div>
+      </div>
+      <div class="ph ph-lock">
+        <div class="ph-lbl">🔒 Month 3 — Review</div>
+        <div class="phi"><div class="cie"></div><span class="lk">Probation review</span></div>
+        <div class="phi"><div class="cie"></div><span class="lk">Goals agreed</span></div>
+        <div class="phi"><div class="cie"></div><span class="lk">Programme complete</span></div>
+      </div>
+    </div>
+    <div class="ob-ft">
+      <button class="btn-g">Continue — Month 1 &rarr;</button>
+      <button class="btn-ol">View Full Journey</button>
+      <div class="buddy">
+        <div class="buddy-av">
+          <img src="https://cwcon.co.uk/wp-content/uploads/2025/12/john-barnett.webp" alt="Buddy" onerror="this.style.display='none';this.parentElement.textContent='JB'"/>
+        </div>
+        <span>Buddy: John Barnett &nbsp;<a href="#">· Message</a></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4-COLUMN ROW -->
+<section class="four-sec">
+  <div class="sec-hd" style="color:var(--navy);">🗂 Your Dashboard</div>
+  <div class="four-grid">
+
+    <!-- Recently Updated -->
+    <div class="cc">
+      <div class="cc-head">
+        <div class="cc-hi gr">🔄</div>
+        <span>Recently Updated</span>
+      </div>
+      <div class="cc-body">
+        <div class="ur"><span class="di">📄</span><span class="ur-n">NABERS UK v1.2 Update</span><span class="bdg bg-g2">Updated</span><span class="ur-d">19 May</span></div>
+        <div class="ur"><span class="di">📄</span><span class="ur-n">EPC Methodology Guide</span><span class="bdg bg-g2">Updated</span><span class="ur-d">16 May</span></div>
+        <div class="ur"><span class="di">📄</span><span class="ur-n">Decarbonisation Playbook</span><span class="bdg bg-g2">Updated</span><span class="ur-d">14 May</span></div>
+        <div class="ur"><span class="di">📄</span><span class="ur-n">Climate Risk Template</span><span class="bdg bg-b2">New</span><span class="ur-d">12 May</span></div>
+        <div class="ur"><span class="di">📄</span><span class="ur-n">Net Zero Standard</span><span class="bdg bg-g2">Updated</span><span class="ur-d">9 May</span></div>
+      </div>
+      <div class="cc-ft"><a href="#">View all recently updated &rarr;</a></div>
+    </div>
+
+    <!-- Events & Training -->
+    <div class="cc">
+      <div class="cc-head">
+        <div class="cc-hi bl">📅</div>
+        <span>Events &amp; Training</span>
+      </div>
+      <div class="cc-body">
+        <div class="ev">
+          <div class="ev-cal"><div class="ev-day">22</div><div class="ev-mon">May</div></div>
+          <div class="ev-inf"><p>All-hands team meeting</p><span>10:00 · Teams call</span><div class="ev-t et-m">Mandatory</div></div>
+        </div>
+        <div class="ev">
+          <div class="ev-cal"><div class="ev-day">28</div><div class="ev-mon">May</div></div>
+          <div class="ev-inf"><p>ISO 14001 awareness</p><span>14:00 · Meeting Room 2</span><div class="ev-t et-tr">Training</div></div>
+        </div>
+        <div class="ev">
+          <div class="ev-cal"><div class="ev-day">3</div><div class="ev-mon">Jun</div></div>
+          <div class="ev-inf"><p>CIBSE: Net Zero 2025</p><span>12:00 · External webinar</span><div class="ev-t et-cpd">CPD</div></div>
+        </div>
+      </div>
+      <div class="cc-ft"><a href="#">View full calendar &rarr;</a></div>
+    </div>
+
+    <!-- Expert Finder — real CWC team -->
+    <div class="cc">
+      <div class="cc-head">
+        <div class="cc-hi pu">🔍</div>
+        <span>Expert Finder</span>
+      </div>
+      <div class="cc-body">
+        <div class="exp-row">
+          <div class="exp-av"><img src="https://cwcon.co.uk/wp-content/uploads/2025/12/chris-skinner.webp" alt="Chris Skinner" onerror="this.outerHTML='<div class=exp-av style=background:#e8f5ee;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#2d7a52>CS</div>'"/></div>
+          <div class="exp-i"><p>Chris Skinner</p><span>CEO</span></div>
+          <button class="btn-p">Profile</button>
+        </div>
+        <div class="exp-row">
+          <div class="exp-av"><img src="https://cwcon.co.uk/wp-content/uploads/2025/12/andy-ringland.webp" alt="Andrew Ringland" onerror="this.outerHTML='<div class=exp-av style=background:#e8f5ee;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#2d7a52>AR</div>'"/></div>
+          <div class="exp-i"><p>Andrew Ringland</p><span>CTO</span></div>
+          <button class="btn-p">Profile</button>
+        </div>
+        <div class="exp-row">
+          <div class="exp-av"><img src="https://cwcon.co.uk/wp-content/uploads/2025/12/unnamed-file.webp" alt="Simon Woods" onerror="this.outerHTML='<div class=exp-av style=background:#e8f5ee;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#2d7a52>SW</div>'"/></div>
+          <div class="exp-i"><p>Simon Woods</p><span>Associate Director</span></div>
+          <button class="btn-p">Profile</button>
+        </div>
+        <div class="exp-row">
+          <div class="exp-av"><img src="https://cwcon.co.uk/wp-content/uploads/2025/12/1760714827906-1.jpeg" alt="Gareth Rowlands" onerror="this.outerHTML='<div class=exp-av style=background:#e8f5ee;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#2d7a52>GR</div>'"/></div>
+          <div class="exp-i"><p>Gareth Rowlands</p><span>Regional Director</span></div>
+          <button class="btn-p">Profile</button>
+        </div>
+      </div>
+      <div class="cc-ft"><a href="#">View all team members &rarr;</a></div>
+    </div>
+
+    <!-- Company News -->
+    <div class="cc">
+      <div class="cc-head">
+        <div class="cc-hi or">📰</div>
+        <span>Company News</span>
+        <span class="cc-bdg bg-b2">2 new</span>
+      </div>
+      <div class="cc-body">
+        <div class="ni">
+          <div class="ni-img nav-bg">🏙</div>
+          <span class="nbdg bg-b2">Win</span>
+          <h5>New net zero framework contract awarded</h5>
+          <p>Expanding our sustainability portfolio further.</p>
+          <a href="#">Read more &rarr;</a>
+        </div>
+        <div class="ni">
+          <span class="nbdg bg-g2">Achievement</span>
+          <h5>ISO 14001 recertification confirmed</h5>
+          <p>Environmental management milestone for the team.</p>
+          <a href="#">Read more &rarr;</a>
+        </div>
+      </div>
+      <div class="cc-ft"><a href="#">View all news &rarr;</a></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- LOWER 3-COL -->
+<section class="lower-sec">
+  <div class="lower-grid">
+
+    <!-- People Policies -->
+    <div class="lc">
+      <div class="lc-head">
+        <div class="lc-hi" style="background:#fce7f3;">🧑‍💼</div>
+        <span>People Policies</span>
+      </div>
+      <div class="lc-body">
+        <div class="pr">
+          <div class="pr-ic" style="background:#fce7f3;">🏠</div>
+          <span>Agile Working Policy</span>
+          <span class="pr-arr">›</span>
+        </div>
+        <div class="pr">
+          <div class="pr-ic" style="background:#fce7f3;">👶</div>
+          <span>Maternity Policy</span>
+          <span class="pr-arr">›</span>
+        </div>
+        <div class="pr">
+          <div class="pr-ic" style="background:#d1fae5;">🧠</div>
+          <span>Mental Health Policy</span>
+          <span class="pr-arr">›</span>
+        </div>
+        <div class="pr">
+          <div class="pr-ic" style="background:#fef3c7;">👨‍👧</div>
+          <span>Parental Leave Policy</span>
+          <span class="pr-arr">›</span>
+        </div>
+        <div class="pr">
+          <div class="pr-ic" style="background:#fee2e2;">⚖️</div>
+          <span>Disciplinary Policy</span>
+          <span class="pr-arr">›</span>
+        </div>
+      </div>
+      <div class="lc-ft"><a href="#">View all policies &rarr;</a></div>
+    </div>
+
+    <!-- Employee Benefits -->
+    <div class="lc">
+      <div class="lc-head">
+        <div class="lc-hi" style="background:#d1fae5;">⭐</div>
+        <span>Employee Benefits</span>
+      </div>
+      <div class="lc-body">
+        <div class="tr">
+          <div class="tr-ic" style="background:#d1fae5;">💷</div>
+          <span>Payslips</span>
+          <span class="pr-arr">›</span>
+        </div>
+        <div class="tr">
+          <div class="tr-ic" style="background:#dbeafe;">🏦</div>
+          <span>Pension Scheme</span>
+          <span class="pr-arr">›</span>
+        </div>
+        <div class="tr">
+          <div class="tr-ic" style="background:#fce7f3;">❤️</div>
+          <span>Simply Health Plan</span>
+          <span class="pr-arr">›</span>
+        </div>
+        <div class="tr">
+          <div class="tr-ic" style="background:#fef3c7;">🎁</div>
+          <span>Employee Benefits Hub</span>
+          <span class="pr-arr">›</span>
+        </div>
+        <div class="tr">
+          <div class="tr-ic" style="background:#ede9fe;">📚</div>
+          <span>Technical Library</span>
+          <span class="pr-arr">›</span>
+        </div>
+      </div>
+      <div class="lc-ft"><a href="#">View all benefits &rarr;</a></div>
+    </div>
+
+    <!-- Curated Insights -->
+    <div class="lc">
+      <div class="lc-head">
+        <div class="lc-hi" style="background:#fef3c7;">💡</div>
+        <span>Curated Insights</span>
+      </div>
+      <div class="lc-body">
+        <div class="ins-g3">
+          <div class="ins-c">
+            <span class="ins-bdg ins-grn">Insight</span>
+            <h5>NABERS UK v1.2 — what it means</h5>
+            <p>Key updates and actions for project teams.</p>
+            <a href="#">Read &rarr;</a>
+          </div>
+          <div class="ins-c">
+            <span class="ins-bdg ins-blu">Guide</span>
+            <h5>EPC Reform: preparing for the future</h5>
+            <p>Upcoming changes and how to stay ahead.</p>
+            <a href="#">Read &rarr;</a>
+          </div>
+          <div class="ins-c">
+            <span class="ins-bdg ins-grn">Insight</span>
+            <h5>Decarbonisation pathways that deliver</h5>
+            <p>Practical strategies for measurable results.</p>
+            <a href="#">Read &rarr;</a>
+          </div>
+        </div>
+        <div class="ins-ft">
+          <a href="#" style="font-size:11px;color:var(--g);font-weight:500;">View all insights &rarr;</a>
+          <div class="arr-btns">
+            <button class="arr-btn">&#9664;</button>
+            <button class="arr-btn">&#9654;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECT + EXTERNAL LINKS -->
+<section class="proj-sec">
+  <div class="proj-grid">
+
+    <div class="proj-card">
+      <div class="proj-head">
+        <span style="font-size:16px;">🏗</span>
+        <span>Project Spotlight</span>
+        <span class="pbdg pbdg-a">3 active</span>
+      </div>
+      <div class="proj-body">
+        <div class="proj-i">
+          <div class="pdot pdot-a"></div>
+          <div class="proj-inf">
+            <p>Manchester City Council — Net Zero Pathways</p>
+            <small>MEP &amp; Sustainability · Lead: Chris Skinner · Stage 3</small>
+          </div>
+          <span class="pbdg pbdg-a">Active</span>
+        </div>
+        <div class="proj-i">
+          <div class="pdot pdot-t"></div>
+          <div class="proj-inf">
+            <p>Birmingham Office Park — NABERS Assessment</p>
+            <small>Building Performance · Lead: Andrew Ringland · Stage 1</small>
+          </div>
+          <span class="pbdg pbdg-t">Tender</span>
+        </div>
+        <div class="proj-i">
+          <div class="pdot pdot-a"></div>
+          <div class="proj-inf">
+            <p>Liverpool Waterfront — EPC Reform Audit</p>
+            <small>Environmental Assessment · Lead: Simon Woods · Stage 2</small>
+          </div>
+          <span class="pbdg pbdg-a">Active</span>
+        </div>
+      </div>
+      <div class="proj-ft"><a href="#">View all projects &rarr;</a></div>
+    </div>
+
+    <div class="ul-card">
+      <div class="ul-head"><span>🔗 Useful External Links</span></div>
+      <div class="ul-grid">
+        <a href="https://www.cibse.org" target="_blank" class="ul-i"><div class="ul-ic">🏛</div><span>CIBSE</span></a>
+        <a href="https://www.breeam.com" target="_blank" class="ul-i"><div class="ul-ic">🌿</div><span>BREEAM Portal</span></a>
+        <a href="https://www.nabers.gov.au/uk" target="_blank" class="ul-i"><div class="ul-ic">📊</div><span>NABERS UK</span></a>
+        <a href="https://www.rics.org" target="_blank" class="ul-i"><div class="ul-ic">📋</div><span>RICS Guidance</span></a>
+        <a href="https://www.planningportal.co.uk" target="_blank" class="ul-i"><div class="ul-ic">🏛</div><span>Planning Portal</span></a>
+        <a href="https://www.gov.uk/find-energy-certificate" target="_blank" class="ul-i"><div class="ul-ic">⚡</div><span>EPC Register</span></a>
+        <a href="https://www.climatewatchdata.org" target="_blank" class="ul-i"><div class="ul-ic">🌍</div><span>Net Zero Tracker</span></a>
+        <a href="https://www.ukgbc.org" target="_blank" class="ul-i"><div class="ul-ic">🏢</div><span>UKGBC</span></a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-in">
+    <div class="footer-brand">
+      <p>Crookes Walker <em>Consulting</em></p>
+      <small>Building a sustainable and resilient future.</small>
+    </div>
+    <nav class="footer-links">
+      <a href="#">About CWC</a>
+      <a href="#">Our Services</a>
+      <a href="#">Contact</a>
+      <a href="#">Support</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+function notifyHeight(){var h=document.body.scrollHeight;window.parent.postMessage({frameHeight:h},'*');}
+window.addEventListener('load',notifyHeight);
+window.addEventListener('resize',notifyHeight);
+setInterval(notifyHeight,500);
+</script>
+</body>
+</html>
